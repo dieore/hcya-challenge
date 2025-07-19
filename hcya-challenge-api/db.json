@@ -1,0 +1,777 @@
+{
+  "brands": [
+    {
+      "id": "1",
+      "name": "Samsung"
+    },
+    {
+      "id": "2",
+      "name": "Apple"
+    },
+    {
+      "id": "3",
+      "name": "Sony"
+    },
+    {
+      "id": "4",
+      "name": "HP"
+    },
+    {
+      "id": "5",
+      "name": "Lenovo"
+    },
+    {
+      "id": "6",
+      "name": "Men's fashion"
+    },
+    {
+      "id": "7",
+      "name": "Women's fashion"
+    }
+  ],
+  "supercategories": [
+    {
+      "id": "1",
+      "name": "Electrónica"
+    },
+    {
+      "id": "2",
+      "name": "Hogar y Cocina"
+    },
+    {
+      "id": "3",
+      "name": "Moda"
+    }
+  ],
+  "categories": [
+    {
+      "id": "1",
+      "name": "Teléfonos",
+      "supercategoryId": 1
+    },
+    {
+      "id": "2",
+      "name": "Computadoras",
+      "supercategoryId": 1
+    },
+    {
+      "id": "3",
+      "name": "Electrodomésticos",
+      "supercategoryId": 2
+    },
+    {
+      "id": "4",
+      "name": "Ropa de Hombre",
+      "supercategoryId": 3
+    },
+    {
+      "id": "5",
+      "name": "Ropa de Mujer",
+      "supercategoryId": 3
+    }
+  ],
+  "subcategories": [
+    {
+      "id": "1",
+      "name": "Smartphones",
+      "categoryId": 1
+    },
+    {
+      "id": "2",
+      "name": "Teléfonos Fijos",
+      "categoryId": 1
+    },
+    {
+      "id": "3",
+      "name": "Notebooks",
+      "categoryId": 2
+    },
+    {
+      "id": "4",
+      "name": "All-in-One",
+      "categoryId": 2
+    },
+    {
+      "id": "5",
+      "name": "Heladeras",
+      "categoryId": 3
+    },
+    {
+      "id": "6",
+      "name": "Microondas",
+      "categoryId": 3
+    },
+    {
+      "id": "7",
+      "name": "Remeras",
+      "categoryId": 4
+    },
+    {
+      "id": "8",
+      "name": "Jeans",
+      "categoryId": 4
+    },
+    {
+      "id": "9",
+      "name": "Vestidos",
+      "categoryId": 5
+    },
+    {
+      "id": "10",
+      "name": "Faldas",
+      "categoryId": 5
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "name": "Galaxy S24",
+      "description": "Smartphone de alta gama",
+      "brandId": 1,
+      "subcategoryId": 1,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 999.99,
+      "stock": 35,
+      "sku": "SAM-GS24",
+      "imgUrl": "https://m.media-amazon.com/images/I/71ZoDT7a2wL._AC_SL1500_.jpg"
+    },
+    {
+      "id": "2",
+      "name": "iPhone 15 Pro",
+      "description": "Smartphone Apple con chip A17",
+      "brandId": 2,
+      "subcategoryId": 1,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 1199,
+      "stock": 20,
+      "sku": "APP-IPH15",
+      "imgUrl": "https://tse1.mm.bing.net/th/id/OIP.PziVpdEcFefEpY0N6I0WEwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "3",
+      "name": "Teléfono Fijo Sony HomeTalk",
+      "description": "Teléfono fijo inalámbrico para el hogar",
+      "brandId": 3,
+      "subcategoryId": 2,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 79.99,
+      "stock": 40,
+      "sku": "SON-HOMETALK",
+      "imgUrl": "https://static-data2.manualslib.com/product-images/16/1596/159523/raw.jpg"
+    },
+    {
+      "id": "4",
+      "name": "Notebook HP Envy 15",
+      "description": "Notebook potente con pantalla 15''",
+      "brandId": 4,
+      "subcategoryId": 3,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 1249.99,
+      "stock": 15,
+      "sku": "HP-NBK15",
+      "imgUrl": "https://tse1.mm.bing.net/th/id/OIP.aEEtBLb1zLkqlKP9TGPZxAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "5",
+      "name": "Lenovo IdeaCentre AIO",
+      "description": "PC All-in-One ideal para oficina",
+      "brandId": 5,
+      "subcategoryId": 4,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 899,
+      "stock": 25,
+      "sku": "LEN-AIO01",
+      "imgUrl": "https://m.media-amazon.com/images/I/71rUl7OIqYL._AC_SL1500_.jpg"
+    },
+    {
+      "id": "6",
+      "name": "Heladera Samsung 350L",
+      "description": "Refrigerador con freezer inferior",
+      "brandId": 1,
+      "subcategoryId": 5,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 749.9,
+      "stock": 12,
+      "sku": "SAM-FR350",
+      "imgUrl": "https://jumboargentina.vtexassets.com/arquivos/ids/471958-800-auto?v=636693855439500000&width=800&height=auto&aspect=true"
+    },
+    {
+      "id": "7",
+      "name": "Microondas Sony HeatWave",
+      "description": "Microondas digital 25L",
+      "brandId": 3,
+      "subcategoryId": 6,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 199,
+      "stock": 30,
+      "sku": "SON-MW25",
+      "imgUrl": "https://th.bing.com/th/id/R.339f902ebcca91355aea6933832ecef3?rik=e2tOmrNmghCpFg&pid=ImgRaw&r=0"
+    },
+    {
+      "id": "8",
+      "name": "Remera Hombre Básica",
+      "description": "Remera de algodón 100% (talle M)",
+      "brandId": 6,
+      "subcategoryId": 7,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 19.99,
+      "stock": 60,
+      "sku": "MF-TSHIRT-M",
+      "imgUrl": "https://cf.shopee.com.br/file/sg-11134201-22090-qqto3qv1d2hv58"
+    },
+    {
+      "id": "9",
+      "name": "Jeans Slim Fit Hombre",
+      "description": "Jeans azul con corte moderno",
+      "brandId": 6,
+      "subcategoryId": 8,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 49.99,
+      "stock": 35,
+      "sku": "MF-JEANS01",
+      "imgUrl": "https://tse2.mm.bing.net/th/id/OIP.dmTB534dEUtbp0o-KDE_hgHaLE?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "10",
+      "name": "Vestido de Fiesta Rojo",
+      "description": "Vestido largo elegante",
+      "brandId": 7,
+      "subcategoryId": 9,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 89.9,
+      "stock": 20,
+      "sku": "WF-VEST01",
+      "imgUrl": "https://img.freepik.com/fotos-premium/vestido-rojo-coctel-noche-maniqui-concepto-moda-salon_359031-24360.jpg"
+    },
+    {
+      "id": "11",
+      "name": "Falda Plisada Negra",
+      "description": "Falda de tela suave con cierre lateral",
+      "brandId": 7,
+      "subcategoryId": 10,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 39.5,
+      "stock": 28,
+      "sku": "WF-FALD01",
+      "imgUrl": "https://tse2.mm.bing.net/th/id/OIP.uLaPWtDYcPabdFiuf5ruNwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "12",
+      "name": "Vestido Noche",
+      "description": "Vestido Noche negro elegante",
+      "brandId": 7,
+      "subcategoryId": 9,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 1125.42,
+      "stock": 45,
+      "sku": "WF-VES-012",
+      "imgUrl": "https://img.freepik.com/foto-gratis/maniqui-metalico-modelo-reflejo-brillante-vestido-noche-negro_121764-180.jpg"
+    },
+    {
+      "id": "13",
+      "name": "DeskCenter Pro",
+      "description": "DeskCenter Pro All-in-One",
+      "brandId": 5,
+      "subcategoryId": 4,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 1356.63,
+      "stock": 45,
+      "sku": "LEN-ALL-013",
+      "imgUrl": "https://tse1.mm.bing.net/th/id/OIP.FRvQ_PL6MGcFt1JeKRlt5QHaHa?r=0&w=800&h=800&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "14",
+      "name": "Jeans clásico Hombre",
+      "description": "Jeans hombre clásico skinny fit",
+      "brandId": 6,
+      "subcategoryId": 8,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 541.44,
+      "stock": 88,
+      "sku": "MF-JEA-014",
+      "imgUrl": "https://edge.disstg.commercecloud.salesforce.com/dw/image/v2/BGHZ_STG/on/demandware.static/-/Sites-master-catalog-tricot/default/dw24ca2bbe/images/large/MD610725-2.jpg?sw=1000&sh=1000&sm=fit&q=100&strip=false"
+    },
+    {
+      "id": "15",
+      "name": "QuickWave",
+      "description": "QuickWave Microondas",
+      "brandId": 1,
+      "subcategoryId": 6,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 1392.12,
+      "stock": 87,
+      "sku": "SAM-MIC-015",
+      "imgUrl": "https://petenattiar.vtexassets.com/arquivos/ids/203958-800-800?v=637932457030430000&width=800&height=800&aspect=true"
+    },
+    {
+      "id": "16",
+      "name": "Jeans Hombre",
+      "description": "Jeans Hombre azul oscuro",
+      "brandId": 6,
+      "subcategoryId": 8,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 430.04,
+      "stock": 23,
+      "sku": "MF-JEA-016",
+      "imgUrl": "https://girbaud.vteximg.com.br/arquivos/ids/181586-500-500/jean-stretch-para-hombre-breaker-marithe-francois-girbaud13.jpg?v=637486844229970000"
+    },
+    {
+      "id": "17",
+      "name": "Vestido Floral",
+      "description": "Vestido Floral de verano",
+      "brandId": 7,
+      "subcategoryId": 9,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 892.33,
+      "stock": 84,
+      "sku": "WF-VES-017",
+      "imgUrl": "https://m.media-amazon.com/images/I/71qGIj-xEOL._AC_UL480_FMwebp_QL65_.jpg"
+    },
+    {
+      "id": "18",
+      "name": "Heladera Samsung NO FROST",
+      "description": "Heladera Samsung NO FROST 382lt",
+      "brandId": 1,
+      "subcategoryId": 5,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 1160.61,
+      "stock": 14,
+      "sku": "SAM-HEL-018",
+      "imgUrl": "https://tse1.mm.bing.net/th/id/OIP.PkD5c9jOTH0vwk62RfFs9QHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "19",
+      "name": "UltraPhone Z",
+      "description": "UltraPhone Z Smartphones",
+      "brandId": 5,
+      "subcategoryId": 1,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 815.39,
+      "stock": 38,
+      "sku": "LEN-SMA-019",
+      "imgUrl": "https://www.askmea2z.com/inventory_images/25438c.jpg"
+    },
+    {
+      "id": "20",
+      "name": "MicroChef Plus",
+      "description": "MicroChef Plus Microondas",
+      "brandId": 1,
+      "subcategoryId": 6,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 1305.06,
+      "stock": 94,
+      "sku": "SAM-MIC-020",
+      "imgUrl": "https://tse3.mm.bing.net/th/id/OIP.bIH4BO_vmES5xYE7ONSKLAHaF7?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "21",
+      "name": "NotePro 14",
+      "description": "NotePro 14 Notebooks",
+      "brandId": 3,
+      "subcategoryId": 3,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 1018.66,
+      "stock": 62,
+      "sku": "SON-NOT-021",
+      "imgUrl": "https://tm.ibxk.com.br/2012/10/materias/32536595730135334.jpg"
+    },
+    {
+      "id": "22",
+      "name": "Computadora All-in-One Samsung",
+      "description": "Computadora All-in-One Samsung",
+      "brandId": 1,
+      "subcategoryId": 4,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 1379.06,
+      "stock": 18,
+      "sku": "SAM-ALL-022",
+      "imgUrl": "https://s2.glbimg.com/zz0PjLluiMsx04LixxoHYHxV5hw=/1200x/smart/filters:cover():strip_icc()/i.s3.glbimg.com/v1/AUTH_08fbf48bc0524877943fe86e43087e7a/internal_photos/bs/2020/D/w/RuBALQSiqrgzWc1adGEg/all-in-one-e3.jpg"
+    },
+    {
+      "id": "23",
+      "name": "Heladera No Frost Samsung",
+      "description": "Heladera No Frost Inverter Samsung RL4034SBASL 400Lt",
+      "brandId": 1,
+      "subcategoryId": 5,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 851.21,
+      "stock": 77,
+      "sku": "SAM-HEL-023",
+      "imgUrl": "https://images.precialo.com/products/heladera-no-frost-inverter-samsung-rl4034sbasl-400lt/550c8550-69df-4419-9bce-b73e87c9a3ef.jpeg"
+    },
+    {
+      "id": "24",
+      "name": "Remera Mangas Largas",
+      "description": "Remera Mangas Largas Hombre",
+      "brandId": 7,
+      "subcategoryId": 7,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 918.09,
+      "stock": 91,
+      "sku": "WF-REM-024",
+      "imgUrl": "https://www.sietecumbres.com.ar/img/articulos/2022/05/remera_lef_mangas_largas_upf_50_versatil_imagen8.jpg"
+    },
+    {
+      "id": "25",
+      "name": "Celular Sony Xperia Pro",
+      "description": "Celular Sony Xperia Pro",
+      "brandId": 3,
+      "subcategoryId": 1,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 371.02,
+      "stock": 7,
+      "sku": "SON-SMA-025",
+      "imgUrl": "https://mob4g.com/wp-content/uploads/2021/10/Sony-Xperia-Pro-I.webp"
+    },
+    {
+      "id": "26",
+      "name": "Vestido Floral",
+      "description": "Vestido Floral de verano",
+      "brandId": 7,
+      "subcategoryId": 9,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 1251.24,
+      "stock": 8,
+      "sku": "WF-VES-026",
+      "imgUrl": "https://product-images.therealreal.com/MMA148822_1_enlarged.jpg"
+    },
+    {
+      "id": "27",
+      "name": "Heladera Samsung Side By Side",
+      "description": "Heladera Samsung Side By Side Led Inverter Clase A",
+      "brandId": 1,
+      "subcategoryId": 5,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 83.46,
+      "stock": 88,
+      "sku": "SAM-HEL-027",
+      "imgUrl": "https://mlstaticquic-a.akamaihd.net/heladera-samsung-side-by-side-led-inverter-clase-a-rf263-dim-D_NQ_NP_798669-MLU29586818787_032019-F.jpg"
+    },
+    {
+      "id": "28",
+      "name": "Heladera SAMSUNG Side By Side",
+      "description": "Heladera SAMSUNG Side By Side RF27T5201B1 766Lts",
+      "brandId": 1,
+      "subcategoryId": 5,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 913.79,
+      "stock": 48,
+      "sku": "SAM-HEL-028",
+      "imgUrl": "https://netpc.uy/wp-content/uploads/2021/05/2-45-1024x1024.jpg"
+    },
+    {
+      "id": "29",
+      "name": "Lenovo Smartphone",
+      "description": "Lenovo Smartphone rosado",
+      "brandId": 5,
+      "subcategoryId": 1,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 175.58,
+      "stock": 90,
+      "sku": "LEN-SMA-029",
+      "imgUrl": "https://mms.businesswire.com/media/20140223005079/en/404299/5/S850_2_highres.jpg"
+    },
+    {
+      "id": "30",
+      "name": "Teléfono fijo HP",
+      "description": "Hp 3COM 3500B Teléfono fijo",
+      "brandId": 4,
+      "subcategoryId": 2,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 371.97,
+      "stock": 47,
+      "sku": "HP-TEL-030",
+      "imgUrl": "https://d2e6ccujb3mkqf.cloudfront.net/b8e2dd92-bbed-49f7-8db9-08127b0b42b1-1_b8575878-e683-40e2-8a1c-54b75a061466.jpg"
+    },
+    {
+      "id": "31",
+      "name": "BlueFit Jeans Hombre",
+      "description": "BlueFit Jeans para Hombre",
+      "brandId": 6,
+      "subcategoryId": 8,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 343.86,
+      "stock": 32,
+      "sku": "MF-JEA-031",
+      "imgUrl": "https://tse4.mm.bing.net/th/id/OIP.iDBn6y6J3ASRIWeHQL4QdgHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "32",
+      "name": "Microondas Samsung 28L",
+      "description": "Microondas Samsung 28 litros y grill - MG28F303TAK/EC",
+      "brandId": 1,
+      "subcategoryId": 6,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 849.75,
+      "stock": 27,
+      "sku": "SAM-MIC-032",
+      "imgUrl": "https://th.bing.com/th/id/R.bf2ef68433cd492fbfacdb0788f92176?rik=NuTpi4Kv50bqtg&pid=ImgRaw&r=0"
+    },
+    {
+      "id": "33",
+      "name": "Horno Microondas Samsung",
+      "description": "Horno Microondas MS23J5133AT Samsung",
+      "brandId": 1,
+      "subcategoryId": 6,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 749.64,
+      "stock": 33,
+      "sku": "SAM-MIC-033",
+      "imgUrl": "https://lavictoria.ec/wp-content/uploads/2023/01/HORNO-MICROONDAS-SAMSUNG-MS23J5133AT-2.jpg"
+    },
+    {
+      "id": "34",
+      "name": "Teléfono fijo Samsung",
+      "description": "Teléfono fijo digital Samsung SMT-P5007S",
+      "brandId": 1,
+      "subcategoryId": 2,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 524.25,
+      "stock": 90,
+      "sku": "SAM-TEL-034",
+      "imgUrl": "https://unitedtelecoms.co.za/wp-content/uploads/2021/11/SMT-P5007S_0.png"
+    },
+    {
+      "id": "35",
+      "name": "Apple Macbook Pro",
+      "description": "Apple Macbook Pro 17 pulgadas",
+      "brandId": 2,
+      "subcategoryId": 3,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 348.91,
+      "stock": 23,
+      "sku": "APP-NOT-035",
+      "imgUrl": "https://sm.pcmag.com/pcmag_au/photo/a/apple-macbook-pro-17-inch-unibody-angle/apple-macbook-pro-17-inch-unibody-angle_nrr6.jpg"
+    },
+    {
+      "id": "36",
+      "name": "Vestido de fiesta",
+      "description": "Vestido rojo de fiesta",
+      "brandId": 7,
+      "subcategoryId": 9,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 1181.91,
+      "stock": 98,
+      "sku": "WF-VES-036",
+      "imgUrl": "https://cdn.shopify.com/s/files/1/0980/4470/products/OfftheShoulderShortRedPromDresses_ShortRedFormalGraduationDresses_large.jpg?v=1682068770"
+    },
+    {
+      "id": "37",
+      "name": "PC Sony Vaio all-in-one",
+      "description": "Sony Vaio L-Series is all-in-one touchscreen",
+      "brandId": 3,
+      "subcategoryId": 4,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 26.53,
+      "stock": 33,
+      "sku": "SON-ALL-037",
+      "imgUrl": "https://cdn.mos.cms.futurecdn.net/8d736d0251794316f3e8bf56257849e2.jpg"
+    },
+    {
+      "id": "38",
+      "name": "Falda Larga Fiesta",
+      "description": "Falda Larga de fiesta color petróleo",
+      "brandId": 7,
+      "subcategoryId": 10,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 1074.29,
+      "stock": 71,
+      "sku": "WF-FAL-038",
+      "imgUrl": "https://meuaboutique.com/wp-content/uploads/2022/07/Falda-lagra-fiesta-VERDE.jpg"
+    },
+    {
+      "id": "39",
+      "name": "Microondas Samsung 40lt",
+      "description": "Microondas Samsung 40lt",
+      "brandId": 1,
+      "subcategoryId": 6,
+      "supercategoryId": 2,
+      "categoryId": 3,
+      "price": 1114.02,
+      "stock": 42,
+      "sku": "SAM-MIC-039",
+      "imgUrl": "https://tse4.mm.bing.net/th/id/OIP.A3JSugXUz6LdlyRSBJC8oAHaHa?r=0&w=720&h=720&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "40",
+      "name": "Vestido Floral largo",
+      "description": "Maxi Vestido Floral en Chifón Amarillo",
+      "brandId": 7,
+      "subcategoryId": 9,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 183.33,
+      "stock": 42,
+      "sku": "WF-VES-040",
+      "imgUrl": "https://es.chicwish.com/media/catalog/product/cache/789a34736ead3066d85296b038a5aa03/5/_/5.6.15c.36.jpg"
+    },
+    {
+      "id": "41",
+      "name": "Celular APPLE iPhone 14 Plus",
+      "description": "Celular APPLE iPhone 14 Plus 6.7 Retina A15 256GB 5G Malva",
+      "brandId": 2,
+      "subcategoryId": 1,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 1462.73,
+      "stock": 54,
+      "sku": "APP-SMA-041",
+      "imgUrl": "https://netpc.uy/wp-content/uploads/2022/09/4-36-1024x1024.jpg"
+    },
+    {
+      "id": "42",
+      "name": "Pantalón recto Hombre",
+      "description": "Pantalón recto Hombre beige",
+      "brandId": 6,
+      "subcategoryId": 8,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 659.56,
+      "stock": 55,
+      "sku": "MF-JEA-042",
+      "imgUrl": "https://tse1.mm.bing.net/th/id/OIP.hKfcG_BIbJT9jGpBcNq3IQHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "43",
+      "name": "Apple iMac All-in-One",
+      "description": "Apple iMac All-in-One Desktop 27-inch (5K) 3.1GHZ 6-Core i5 (2019) 3TB",
+      "brandId": 2,
+      "subcategoryId": 4,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 738.93,
+      "stock": 98,
+      "sku": "APP-ALL-043",
+      "imgUrl": "https://i5.walmartimages.com/asr/e5b28272-cc49-4b80-abfe-a50ed69619dd.339ff946d01b3e5e56056013534ef009.jpeg"
+    },
+    {
+      "id": "44",
+      "name": "Lenovo Slimbook",
+      "description": "Lenovo Slimbook AMD A9 Setara Core i3 gen 8 Ram 8 HDD 1TB",
+      "brandId": 5,
+      "subcategoryId": 3,
+      "supercategoryId": 1,
+      "categoryId": 2,
+      "price": 1137.77,
+      "stock": 30,
+      "sku": "LEN-NOT-044",
+      "imgUrl": "https://images.tokopedia.net/img/cache/700/VqbcmM/2022/11/28/9f553ce0-6697-48a4-ab3f-eca25fc862ec.jpg"
+    },
+    {
+      "id": "45",
+      "name": "Apple iPhone 14",
+      "description": "Celular Smartphone Apple iPhone 14 Pro Max 256gb",
+      "brandId": 2,
+      "subcategoryId": 1,
+      "supercategoryId": 1,
+      "categoryId": 1,
+      "price": 318.07,
+      "stock": 19,
+      "sku": "APP-SMA-045",
+      "imgUrl": "https://www.taqi.com.br/ccstore/v1/images/?source=/file/v4117980667082415450/products/221759.00-apple-iphone-14-pro-max-256gb-dourado-mq9w3be-taqi.jpg"
+    },
+    {
+      "id": "46",
+      "name": "Remera Hombre Estampada",
+      "description": "Remera manga corta estampada Hombre",
+      "brandId": 6,
+      "subcategoryId": 7,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 672.85,
+      "stock": 14,
+      "sku": "MF-REM-046",
+      "imgUrl": "https://www.abyss.com.ar/img_productos/000-0602-TR.jpg"
+    },
+    {
+      "id": "47",
+      "name": "Falda plisada larga",
+      "description": "Faldas Plisadas Primavera Otoño Señoras",
+      "brandId": 7,
+      "subcategoryId": 10,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 951.95,
+      "stock": 19,
+      "sku": "WF-FAL-047",
+      "imgUrl": "https://www.cdiscount.com/pdt2/2/4/3/1/700x700/mp59250243/rw/jupe-plissee-femme-jupe-longue-taille-elastique-ju.jpg"
+    },
+    {
+      "id": "48",
+      "name": "Pantalón chino de hombre",
+      "description": "Pantalón chino de hombre 360 Flex, skinny fit, estilo casual",
+      "brandId": 6,
+      "subcategoryId": 8,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 1144.75,
+      "stock": 96,
+      "sku": "MF-JEA-048",
+      "imgUrl": "https://tse4.mm.bing.net/th/id/OIP.gcqgBmejXsWe01DyNjoV8QHaJM?r=0&w=779&h=967&rs=1&pid=ImgDetMain&o=7&rm=3"
+    },
+    {
+      "id": "49",
+      "name": "Falda Larga",
+      "description": "Falda Larga color natural",
+      "brandId": 7,
+      "subcategoryId": 10,
+      "supercategoryId": 3,
+      "categoryId": 5,
+      "price": 601.37,
+      "stock": 64,
+      "sku": "WF-FAL-049",
+      "imgUrl": "https://img.freepik.com/fotos-premium/primer-plano-falda-maniqui_1034966-107047.jpg"
+    },
+    {
+      "id": "50",
+      "name": "Pantalón urbano hombre",
+      "description": "Pantalón urbano hombre",
+      "brandId": 6,
+      "subcategoryId": 8,
+      "supercategoryId": 3,
+      "categoryId": 4,
+      "price": 550.84,
+      "stock": 51,
+      "sku": "MF-JEA-050",
+      "imgUrl": "https://tse2.mm.bing.net/th/id/OIP.m30Bj9YHZOfgi22LskoRxwHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3"
+    }
+  ]
+}
