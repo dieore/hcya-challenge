@@ -5,7 +5,23 @@ const server = jsonServer.create();
 const router = jsonServer.router("db.json");
 const middlewares = jsonServer.defaults();
 
-server.use(cors()); 
+// Enable CORS with x-total-count exposed
+server.use(cors({
+  origin: '*',
+  exposedHeaders: ['x-total-count']
+}));
+
+// Middleware to set x-total-count header for all GET requests
+server.use((req, res, next) => {
+  if (req.method === 'GET') {
+    const resource = req.path.replace('/', '');
+    if (resource) {
+      const data = router.db.get(resource).value();
+      res.set('x-total-count', data.length);
+    }
+  }
+  next();
+});
 
 // Support for partial text searches
 server.use((req, res, next) => {
