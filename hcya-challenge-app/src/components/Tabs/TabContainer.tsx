@@ -55,11 +55,19 @@ export default function TabContainer() {
 
       <Box flexGrow={1} overflow="auto" p={2}>
         {tabs.map((tab) => {
-          if (tab.id !== activeTabId) return null;
-          const activeItem = sidebarItems.find((item) => item.id === tab.id);
-          return activeItem ? (
-            <Box key={tab.id}>{activeItem.component}</Box>
-          ) : null;
+          const tabItem = sidebarItems.find((item) => item.id === tab.id);
+          if (!tabItem) return null;
+
+          return (
+            <Box
+              key={tab.id}
+              height="100%"
+              width="100%"
+              sx={{ display: tab.id === activeTabId ? "block" : "none" }}
+            >
+              {tabItem.component}
+            </Box>
+          );
         })}
       </Box>
     </Box>
