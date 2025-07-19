@@ -1,5 +1,4 @@
-import axios from "axios";
-import type { AxiosInstance } from "axios";
+import api from "../config/api";
 
 export interface Subcategory {
   id: string;
@@ -24,17 +23,8 @@ export const initialSubcategoryFilters: SubcategoryQueryParams = {
 };
 
 export class SubcategoryService {
-  private api: AxiosInstance;
   private endpoint: string = "/subcategories";
-
-  constructor(baseURL: string) {
-    this.api = axios.create({
-      baseURL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
+  private api = api;
 
   async getAll(): Promise<Subcategory[]> {
     const res = await this.api.get(this.endpoint);

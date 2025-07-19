@@ -4,11 +4,9 @@ import { ProductService } from "./productService";
 import { SubcategoryService } from "./subcategoryService";
 import { SupercategoryService } from "./supercategoryService";
 
-const baseURL = import.meta.env.VITE_API_URL;
-
-export const productService = new ProductService(baseURL);
-export const brandService = new BrandService(baseURL);
-export const categoryService = new CategoryService(baseURL);
-export const subcategoryService = new SubcategoryService(baseURL);
-export const supercategoryService = new SupercategoryService(baseURL);
+export const productService = new ProductService();
+export const brandService = new BrandService();
+export const categoryService = new CategoryService();
+export const subcategoryService = new SubcategoryService();
+export const supercategoryService = new SupercategoryService();
 

@@ -1,5 +1,4 @@
-import axios from "axios";
-import type { AxiosInstance } from "axios";
+import api from "../config/api";
 
 export interface Category {
   id: string;
@@ -24,17 +23,8 @@ export const initialCategoryFilters: CategoryQueryParams = {
 };
 
 export class CategoryService {
-  private api: AxiosInstance;
   private endpoint: string = "/categories";
-
-  constructor(baseURL: string) {
-    this.api = axios.create({
-      baseURL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
+  private api = api;
 
   async getAll(): Promise<Category[]> {
     const res = await this.api.get(this.endpoint);

@@ -1,5 +1,4 @@
-import axios from "axios";
-import type { AxiosInstance } from "axios";
+import api from "../config/api";
 
 export interface Supercategory {
   id: string;
@@ -22,17 +21,8 @@ export const initialSupercategoryFilters: SupercategoryQueryParams = {
 };
 
 export class SupercategoryService {
-  private api: AxiosInstance;
   private endpoint: string = "/supercategories";
-
-  constructor(baseURL: string) {
-    this.api = axios.create({
-      baseURL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
+  private api = api;
 
   async getAll(): Promise<Supercategory[]> {
     const res = await this.api.get(this.endpoint);

@@ -1,5 +1,4 @@
-import axios from "axios";
-import type { AxiosInstance } from "axios";
+import api from "../config/api";
 
 export interface Brand {
   id: string;
@@ -22,17 +21,8 @@ export const initialBrandFilters: BrandQueryParams = {
 };
 
 export class BrandService {
-  private api: AxiosInstance;
   private endpoint: string = "/brands";
-
-  constructor(baseURL: string) {
-    this.api = axios.create({
-      baseURL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
+  private api = api;
 
   async getAll(): Promise<Brand[]> {
     const res = await this.api.get(this.endpoint);

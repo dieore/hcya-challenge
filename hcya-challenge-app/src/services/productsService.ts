@@ -1,5 +1,4 @@
-import axios from "axios";
-import type { AxiosInstance } from "axios";
+import api from "../config/api";
 
 export interface Product {
   id: string;
@@ -14,19 +13,11 @@ export interface Product {
 }
 
 export class ProductService {
-  private api: AxiosInstance;
-
-  constructor(baseURL: string) {
-    this.api = axios.create({
-      baseURL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-  }
+  private endpoint: string = "/products";
+  private api = api;
 
   async getAll(): Promise<Product[]> {
-    const res = await this.api.get("/products");
+    const res = await this.api.get(this.endpoint);
     return res.data;
   }
 
