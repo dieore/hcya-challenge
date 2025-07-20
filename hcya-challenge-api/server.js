@@ -11,18 +11,6 @@ server.use(cors({
   exposedHeaders: ['x-total-count']
 }));
 
-// Middleware to set x-total-count header for all GET requests
-server.use((req, res, next) => {
-  if (req.method === 'GET') {
-    const resource = req.path.replace('/', '');
-    if (resource) {
-      const data = router.db.get(resource).value();
-      res.set('x-total-count', data.length);
-    }
-  }
-  next();
-});
-
 // Support for partial text searches
 server.use((req, res, next) => {
   const query = req.query;
@@ -40,7 +28,7 @@ server.use((req, res, next) => {
         return typeof field === 'string' && field.toLowerCase().includes(value);
       });
     });
-
+    res.set('x-total-count', data.length);
     return res.jsonp(data);
   }
 
