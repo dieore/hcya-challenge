@@ -1,5 +1,7 @@
 import axios from 'axios';
-import type { AxiosInstance } from 'axios';
+import type { AxiosInstance, AxiosError } from 'axios';
+import { store } from '../store/store';
+import { showSnackbar } from '../store/snackbar/snackbarSlice';
 
 const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -20,7 +22,14 @@ api.interceptors.request.use(
 // Add response interceptor for common error handling
 api.interceptors.response.use(
   (response) => response,
-  (error) => Promise.reject(error)
+  (error: AxiosError) => {
+    const errorMessage = (error.response?.data as { message?: string })?.message || error.message || 'An error occurred';
+    store.dispatch(showSnackbar({
+      message: errorMessage,
+      severity: 'error',
+    }));
+    return Promise.reject(error);
+  }
 );
 
 export default api;
