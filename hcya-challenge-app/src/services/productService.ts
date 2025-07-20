@@ -99,6 +99,11 @@ export class ProductService {
 
   async getByQuery(params: ProductQueryParams = {}): Promise<ProductResponse> {
     const searchParams = new URLSearchParams();
+    
+    searchParams.append('_expand', 'brand');
+    searchParams.append('_expand', 'category');
+    searchParams.append('_expand', 'subcategory');
+    searchParams.append('_expand', 'supercategory');
 
     Object.entries(params).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -121,7 +126,7 @@ export class ProductService {
   }
 
   async getById(id: string): Promise<Product> {
-    const res = await this.api.get(`${this.endpoint}/${id}`);
+    const res = await this.api.get(`${this.endpoint}/${id}?_expand=brand&_expand=category&_expand=subcategory&_expand=supercategory`);
     return res.data;
   }
 
