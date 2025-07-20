@@ -1,4 +1,7 @@
 import api from "../config/api";
+import type { Brand } from "./brandService";
+import type { Category } from "./categoryService";
+import type { Subcategory } from "./subcategoryService";
 
 export interface Product {
   id: string;
@@ -9,8 +12,11 @@ export interface Product {
   sku: string;
   imgUrl: string;
   brandId: number;
+  brand?: Brand;
   subcategoryId: number;
+  subcategory?: Subcategory;
   categoryId: number;
+  category?: Category;
   supercategoryId: number;
 }
 
