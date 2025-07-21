@@ -1,16 +1,14 @@
-import { Typography, Box, TextField, CircularProgress, Select, MenuItem } from "@mui/material";
+import { Typography, Box, TextField, CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { useDebounce } from "../hooks/useDebounce";
 import { useProducts } from "../hooks/products";
 import ProductTable from "../components/Products/ProductTable";
-import type { GridPaginationModel } from '@mui/x-data-grid';
+import type { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 
 export default function Products() {
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: 10,
-  });
-
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 10 });
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'name', sort: 'asc' }]);
+  
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 700);
 
@@ -18,6 +16,8 @@ export default function Products() {
     name_like: debouncedSearch,
     _page: paginationModel.page + 1,
     _limit: paginationModel.pageSize,
+    _sort: sortModel[0]?.field || 'name',
+    _order: sortModel[0]?.sort || 'asc',
   });
 
   if (error) {
@@ -38,6 +38,7 @@ export default function Products() {
       <Typography variant="h4" gutterBottom>
         Productos
       </Typography>
+
       <Box display="flex" alignItems="center" gap={2}>
         <Typography variant="h6" gutterBottom>
           Total: {isLoading ? <CircularProgress size={16} /> : products?.total}
@@ -59,6 +60,8 @@ export default function Products() {
           loading={isLoading}
           paginationModel={paginationModel}
           onPaginationModelChange={setPaginationModel}
+          sortModel={sortModel}
+          onSortModelChange={setSortModel}
         />
       </Box>
     </Box>
