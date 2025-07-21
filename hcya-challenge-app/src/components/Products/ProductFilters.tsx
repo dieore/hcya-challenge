@@ -1,12 +1,13 @@
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip } from "@mui/material";
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, Button, ButtonGroup, Typography } from "@mui/material";
 import { useBrands } from "../../hooks/brands";
 import { useCategories } from "../../hooks/categories";
 import { useSubcategories } from "../../hooks/subcategories";
 import { useSupercategories } from "../../hooks/supercategories";
-
 import type { SelectChangeEvent } from "@mui/material/Select";
 
-interface ProductFiltersProps {
+export type FilterName = 'brandId' | 'categoryId' | 'subcategoryId' | 'supercategoryId' | 'price_gte' | 'price_lte';
+
+export interface ProductFiltersProps {
   search: string;
   onSearchChange: (value: string) => void;
   filters: {
@@ -14,9 +15,11 @@ interface ProductFiltersProps {
     categoryId: string[];
     subcategoryId: string[];
     supercategoryId: string[];
+    price_gte: string;
+    price_lte: string;
   };
-  onFilterChange: (filterName: string, value: string[]) => void;
-  onRemoveFilter: (filterName: string, value: string) => void;
+  onFilterChange: (filterName: FilterName, value: any) => void;
+  onRemoveFilter: (filterName: FilterName, value?: string) => void;
   isLoading?: boolean;
 }
 
@@ -45,13 +48,47 @@ export default function ProductFilters({
     )
     : [];
 
-  const handleFilterSelect = (filterName: string) => (event: SelectChangeEvent<string[]>) => {
+  const priceRanges = [
+    { label: 'Menos de $300', min: 0, max: 300 },
+    { label: '$300 - $500', min: 300, max: 500 },
+    { label: '$500 - $700', min: 500, max: 700 },
+    { label: '$700 - $1,000', min: 700, max: 1000 },
+    { label: 'Más de $1,000', min: 1000, max: Infinity }
+  ];
+
+  const isPriceRangeActive = (min: number, max: number) => {
+    const currentMin = filters.price_gte ? Number(filters.price_gte) : null;
+    const currentMax = filters.price_lte ? Number(filters.price_lte) : null;
+
+    if (max === Infinity) {
+      return currentMin === min && currentMax === undefined;
+    }
+
+    return currentMin === min && currentMax === max;
+  };
+
+  const handlePriceRangeClick = (min: number, max: number) => {
+    if (isPriceRangeActive(min, max)) {
+      onRemoveFilter('price_gte');
+      onRemoveFilter('price_lte');
+    } else {
+      onFilterChange('price_gte', min.toString());
+
+      if (max !== Infinity) {
+        onFilterChange('price_lte', max.toString());
+      } else {
+        onRemoveFilter('price_lte');
+      }
+    }
+  };
+
+  const handleFilterSelect = (filterName: FilterName) => (event: SelectChangeEvent<string[]>) => {
     const { value } = event.target;
     const newValue = typeof value === 'string' ? value.split(',') : value;
     onFilterChange(filterName, newValue);
   };
 
-  const getFilterLabel = (filterName: string, value: string) => {
+  const getFilterLabel = (filterName: FilterName, value: string) => {
     switch (filterName) {
       case 'brandId':
         return brands.find(b => b.id.toString() === value)?.name || value;
@@ -61,23 +98,45 @@ export default function ProductFilters({
         return allCategories.find(c => c.id.toString() === value)?.name || value;
       case 'subcategoryId':
         return allSubcategories.find(s => s.id.toString() === value)?.name || value;
-      default:
+      case 'price_gte':
+      case 'price_lte':
         return value;
     }
   };
 
   return (
     <>
-      <FormControl sx={{ width: 200, marginBottom: 2 }} size="small">
-        <TextField
-          size="small"
-          label="Buscar por nombre"
+      <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-between" gap={2} mb={2}>
+        <ButtonGroup
           variant="outlined"
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          disabled={isLoading}
-        />
-      </FormControl>
+          size="small"
+          sx={{ flexWrap: 'wrap' }}
+        >
+          {priceRanges.map((range) => {
+            const isActive = isPriceRangeActive(range.min, range.max);
+            return (
+              <Button
+                key={range.label}
+                variant={isActive ? 'contained' : 'outlined'}
+                onClick={() => handlePriceRangeClick(range.min, range.max)}
+              >
+                {range.label}
+              </Button>
+            );
+          })}
+        </ButtonGroup>
+        <FormControl sx={{ width: 200 }} size="small">
+          <TextField
+            size="small"
+            label="Buscar por nombre"
+            variant="outlined"
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            disabled={isLoading}
+          />
+        </FormControl>
+      </Box>
+
 
       <Box display="flex" flexWrap="wrap" gap={2} mb={2}>
         <FormControl sx={{ width: 200 }} size="small">
@@ -87,7 +146,7 @@ export default function ProductFilters({
             value={filters.brandId}
             onChange={handleFilterSelect('brandId')}
             label="Marca"
-            renderValue={(selected) => selected.map(id => getFilterLabel('brandId', id)).join(', ')}      
+            renderValue={(selected) => selected.map(id => getFilterLabel('brandId', id)).join(', ')}
           >
             {brands.map((brand) => (
               <MenuItem key={brand.id} value={brand.id}>
@@ -160,16 +219,38 @@ export default function ProductFilters({
       </Box>
 
       <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
-        {Object.entries(filters).map(([filterName, values]) => 
-          values.map(value => (
+        {Object.entries(filters).map(([filterName, values]) => {
+          const typedFilterName = filterName as FilterName;
+
+          if (typedFilterName === 'price_gte' || typedFilterName === 'price_lte') {
+            const priceValue = filters[typedFilterName];
+            if (!priceValue) return null;
+            const label = typedFilterName === 'price_gte'
+              ? `Precio desde: $${priceValue}`
+              : `Precio hasta: $${priceValue}`;
+            return (
+              <Chip
+                key={typedFilterName}
+                label={label}
+                onDelete={() => onRemoveFilter(typedFilterName)}
+                sx={{ m: 0.5 }}
+              />
+            );
+          }
+
+          // At this point, we know it's one of the array filter types
+          const arrayFilterName = typedFilterName as Exclude<FilterName, 'price_gte' | 'price_lte'>;
+          const filterValues = Array.isArray(values) ? values : [];
+
+          return filterValues.map((value: string) => (
             <Chip
-              key={`${filterName}-${value}`}
-              label={getFilterLabel(filterName, value)}
-              onDelete={() => onRemoveFilter(filterName, value)}
+              key={`${arrayFilterName}-${value}`}
+              label={getFilterLabel(arrayFilterName, value)}
+              onDelete={() => onRemoveFilter(arrayFilterName, value)}
               sx={{ m: 0.5 }}
             />
-          ))
-        )}
+          ));
+        })}
       </Box>
     </>
   );

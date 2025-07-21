@@ -5,6 +5,7 @@ import { useState, useCallback } from "react";
 import ProductTable from "../components/Products/ProductTable";
 import ProductFilters from "../components/Products/ProductFilters";
 
+import type { FilterName } from "../components/Products/ProductFilters";
 import type { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 
 export default function Products() {
@@ -19,39 +20,77 @@ export default function Products() {
     categoryId: [] as string[],
     subcategoryId: [] as string[],
     supercategoryId: [] as string[],
+    price_gte: '',
+    price_lte: ''
   });
 
-  const handleFilterChange = useCallback((filterName: string, newValue: string[]) => {
+  interface Filters {
+    brandId: string[];
+    categoryId: string[];
+    subcategoryId: string[];
+    supercategoryId: string[];
+    price_gte: string;
+    price_lte: string;
+  }
+
+
+  const handleFilterChange = useCallback((filterName: FilterName, newValue: string | string[]) => {
     setFilters(prev => {
-      const updatedFilters = { ...prev, [filterName]: newValue };
+      const updatedFilters = { ...prev };
+      
+      if (filterName === 'price_gte' || filterName === 'price_lte') {
+        updatedFilters[filterName] = newValue as string;
+      } 
+      else if ([
+        'brandId', 
+        'categoryId', 
+        'subcategoryId', 
+        'supercategoryId'
+      ].includes(filterName)) {
+        const value = Array.isArray(newValue) ? newValue : [newValue];
+        updatedFilters[filterName as keyof Omit<Filters, 'price_gte' | 'price_lte'>] = value as string[];
 
-      // Reset child filters when parent changes
-      if (filterName === 'supercategoryId') {
-        updatedFilters.categoryId = [];
-        updatedFilters.subcategoryId = [];
-      } else if (filterName === 'categoryId') {
-        updatedFilters.subcategoryId = [];
+        if (filterName === 'supercategoryId') {
+          updatedFilters.categoryId = [];
+          updatedFilters.subcategoryId = [];
+        } else if (filterName === 'categoryId') {
+          updatedFilters.subcategoryId = [];
+        }
       }
-
+      
       return updatedFilters;
     });
   }, []);
 
-  const handleRemoveFilter = useCallback((filterName: string, value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterName]: prev[filterName as keyof typeof prev].filter(v => v !== value)
-    }));
+  const handleRemoveFilter = useCallback((filterName: FilterName, value?: string) => {
+    if (filterName === 'price_gte' || filterName === 'price_lte') {
+      setFilters(prev => ({
+        ...prev,
+        [filterName]: ''
+      }));
+    } else if (value) {
+      setFilters(prev => ({
+        ...prev,
+        [filterName]: prev[filterName].filter((v: string) => v !== value)
+      }));
+    }
   }, []);
 
-  const { data: products, error, isLoading } = useProducts({
+  const queryParams = {
     name_like: debouncedSearch,
     _page: paginationModel.page + 1,
     _limit: paginationModel.pageSize,
     _sort: sortModel[0]?.field || 'name',
     _order: sortModel[0]?.sort || 'asc',
-    ...filters,
-  });
+    brandId: filters.brandId,
+    categoryId: filters.categoryId,
+    subcategoryId: filters.subcategoryId,
+    supercategoryId: filters.supercategoryId,
+    ...(filters.price_gte ? { price_gte: Number(filters.price_gte) } : {}),
+    ...(filters.price_lte ? { price_lte: Number(filters.price_lte) } : {})
+  };
+
+  const { data: products, error, isLoading } = useProducts(queryParams);
 
   if (error) {
     return (
