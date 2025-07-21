@@ -1,15 +1,23 @@
-import { Typography, Box, Button, TextField } from "@mui/material";
+import { Typography, Box, TextField, CircularProgress, Select, MenuItem } from "@mui/material";
 import { useState } from "react";
 import { useDebounce } from "../hooks/useDebounce";
 import { useProducts } from "../hooks/products";
-import type { Product } from "../services/productService";
+import ProductTable from "../components/Products/ProductTable";
+import type { GridPaginationModel } from '@mui/x-data-grid';
 
 export default function Products() {
-  const [search, setSearch] = useState("");
-  const debouncedSearch = useDebounce(search, 500);
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: 10,
+  });
 
-  const { data: products, error } = useProducts({
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 700);
+
+  const { data: products, error, isLoading } = useProducts({
     name_like: debouncedSearch,
+    _page: paginationModel.page + 1,
+    _limit: paginationModel.pageSize,
   });
 
   if (error) {
@@ -30,37 +38,29 @@ export default function Products() {
       <Typography variant="h4" gutterBottom>
         Productos
       </Typography>
-
-      <Box mb={2}>
-        <TextField
-          label="Buscar productos"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <Button variant="contained" sx={{ ml: 2 }}>
-          Buscar
-        </Button>
+      <Box display="flex" alignItems="center" gap={2}>
+        <Typography variant="h6" gutterBottom>
+          Total: {isLoading ? <CircularProgress size={16} /> : products?.total}
+        </Typography>
       </Box>
 
-      <Typography>
-        Resultados para: {search || "todos los productos"}
-      </Typography>
+      <TextField
+        label="Buscar productos por nombre"
+        variant="outlined"
+        margin="normal"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
 
-      {
-        products?.data?.map((product: Product) => (
-          <>
-            <Box key={product.id}>  
-              <Typography>{product.name}</Typography>
-              <Typography>{product.price}</Typography>
-              <Typography>{product.stock}</Typography>
-              <Typography>{product.category?.name}</Typography>
-              <Typography>{product.subcategory?.name}</Typography>
-              <Typography>{product.brand?.name}</Typography>
-            </Box>
-            <br />
-          </>
-        ))
-      }
+      <Box sx={{ mt: 2 }}>
+        <ProductTable
+          products={products?.data}
+          total={products?.total}
+          loading={isLoading}
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+        />
+      </Box>
     </Box>
   );
 }
