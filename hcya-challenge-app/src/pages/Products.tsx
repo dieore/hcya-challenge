@@ -1,14 +1,10 @@
-import { Typography, Box, TextField, CircularProgress, FormControl, InputLabel, Select, MenuItem, Chip } from "@mui/material";
+import { Typography, Box, CircularProgress } from "@mui/material";
 import { useDebounce } from "../hooks/useDebounce";
 import { useProducts } from "../hooks/products";
-import { useBrands } from "../hooks/brands";
-import { useCategories } from "../hooks/categories";
-import { useSubcategories } from "../hooks/subcategories";
-import { useSupercategories } from "../hooks/supercategories";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import ProductTable from "../components/Products/ProductTable";
+import ProductFilters from "../components/Products/ProductFilters";
 
-import type { SelectChangeEvent } from "@mui/material/Select";
 import type { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 
 export default function Products() {
@@ -16,6 +12,8 @@ export default function Products() {
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'name', sort: 'asc' }]);
 
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 700);
+
   const [filters, setFilters] = useState({
     brandId: [] as string[],
     categoryId: [] as string[],
@@ -23,31 +21,7 @@ export default function Products() {
     supercategoryId: [] as string[],
   });
 
-  const debouncedSearch = useDebounce(search, 700);
-
-  // Fetch filter options
-  const { data: brands = [] } = useBrands();
-  const { data: allCategories = [] } = useCategories();
-  const { data: allSubcategories = [] } = useSubcategories();
-  const { data: supercategories = [] } = useSupercategories();
-
-  // Filter categories and subcategories based on parent selections
-  const filteredCategories = filters.supercategoryId.length > 0
-    ? allCategories.filter(cat =>
-      filters.supercategoryId.includes(cat.supercategoryId.toString())
-    )
-    : [];
-
-  const filteredSubcategories = filters.categoryId.length > 0
-    ? allSubcategories.filter(sub =>
-      filters.categoryId.includes(sub.categoryId.toString())
-    )
-    : [];
-
-  const handleFilterChange = (filterName: keyof typeof filters) => (event: SelectChangeEvent<string[]>) => {
-    const { value } = event.target;
-    const newValue = typeof value === 'string' ? value.split(',') : value;
-
+  const handleFilterChange = useCallback((filterName: string, newValue: string[]) => {
     setFilters(prev => {
       const updatedFilters = { ...prev, [filterName]: newValue };
 
@@ -61,22 +35,14 @@ export default function Products() {
 
       return updatedFilters;
     });
-  };
+  }, []);
 
-  const getFilterLabel = (filterName: keyof typeof filters, value: string) => {
-    switch (filterName) {
-      case 'brandId':
-        return brands.find(b => b.id.toString() === value)?.name || value;
-      case 'supercategoryId':
-        return supercategories.find(s => s.id.toString() === value)?.name || value;
-      case 'categoryId':
-        return allCategories.find(c => c.id.toString() === value)?.name || value;
-      case 'subcategoryId':
-        return allSubcategories.find(s => s.id.toString() === value)?.name || value;
-      default:
-        return value;
-    }
-  };
+  const handleRemoveFilter = useCallback((filterName: string, value: string) => {
+    setFilters(prev => ({
+      ...prev,
+      [filterName]: prev[filterName as keyof typeof prev].filter(v => v !== value)
+    }));
+  }, []);
 
   const { data: products, error, isLoading } = useProducts({
     name_like: debouncedSearch,
@@ -111,114 +77,14 @@ export default function Products() {
         </Typography>
       </Box>
 
-      <FormControl sx={{ width: 200, marginBottom: 2 }} size="small">
-        <TextField
-          size="small"
-          label="Buscar por nombre"
-          variant="outlined"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          disabled={isLoading}
-        />
-      </FormControl>
-
-      <Box display="flex" flexWrap="wrap" gap={2} mb={2}>
-        <FormControl sx={{ width: 200 }} size="small">
-          <InputLabel>Marca</InputLabel>
-          <Select
-            multiple
-            value={filters.brandId}
-            onChange={handleFilterChange('brandId')}
-            label="Marca"
-            renderValue={(selected) => selected.map(id => getFilterLabel('brandId', id)).join(', ')}      
-          >
-            {brands.map((brand) => (
-              <MenuItem key={brand.id} value={brand.id}>
-                {brand.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl sx={{ width: 200 }} size="small">
-          <InputLabel>Supercategoría</InputLabel>
-          <Select
-            multiple
-            value={filters.supercategoryId}
-            onChange={handleFilterChange('supercategoryId')}
-            label="Supercategoría"
-            renderValue={(selected) => selected.map(id => getFilterLabel('supercategoryId', id)).join(', ')}
-          >
-            {supercategories.map((supercategory) => (
-              <MenuItem key={supercategory.id} value={supercategory.id}>
-                {supercategory.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <FormControl sx={{ width: 200 }} size="small">
-          <InputLabel>Categoría</InputLabel>
-          <Select
-            multiple
-            value={filters.categoryId}
-            onChange={handleFilterChange('categoryId')}
-            label="Categoría"
-            disabled={filters.supercategoryId.length === 0}
-            renderValue={(selected) => selected.map(id => getFilterLabel('categoryId', id)).join(', ')}
-          >
-            {filteredCategories.length === 0 ? (
-              <MenuItem disabled>Seleccione una supercategoría primero</MenuItem>
-            ) : (
-              filteredCategories.map((category) => (
-                <MenuItem key={category.id} value={category.id}>
-                  {category.name}
-                </MenuItem>
-              ))
-            )}
-          </Select>
-        </FormControl>
-
-        <FormControl sx={{ width: 200 }} size="small">
-          <InputLabel>Subcategoría</InputLabel>
-          <Select
-            multiple
-            value={filters.subcategoryId}
-            onChange={handleFilterChange('subcategoryId')}
-            label="Subcategoría"
-            disabled={filters.categoryId.length === 0}
-            renderValue={(selected) => selected.map(id => getFilterLabel('subcategoryId', id)).join(', ')}
-          >
-            {filteredSubcategories.length === 0 ? (
-              <MenuItem disabled>Seleccione una categoría primero</MenuItem>
-            ) : (
-              filteredSubcategories.map((subcategory) => (
-                <MenuItem key={subcategory.id} value={subcategory.id}>
-                  {subcategory.name}
-                </MenuItem>
-              ))
-            )}
-          </Select>
-        </FormControl>
-      </Box>
-
-      <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
-        {Object.entries(filters).map(([filterName, values]) => 
-          values.map(value => (
-            <Chip
-              key={`${filterName}-${value}`}
-              label={getFilterLabel(filterName as keyof typeof filters, value)}
-              onDelete={() => {
-                setFilters(prev => ({
-                  ...prev,
-                  [filterName]: prev[filterName as keyof typeof filters].filter(v => v !== value)
-                }));
-              }}
-              sx={{ m: 0.5 }}
-            />
-          ))
-        )}
-      </Box>
+      <ProductFilters
+        search={search}
+        onSearchChange={setSearch}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+        onRemoveFilter={handleRemoveFilter}
+        isLoading={isLoading}
+      />
 
       <Box mt={2}>
         <ProductTable
