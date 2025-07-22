@@ -46,21 +46,12 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
   
   const handleSubmitForm = (data: Product) => {    
     if (isEditing && product) {
+      const { id, ...productData } = data;
+
       updateProduct(
         { 
-          id: product.id!, 
-          product: {
-            name: data.name,
-            sku: data.sku,
-            price: data.price,
-            stock: data.stock,
-            imgUrl: data.imgUrl,
-            brandId: data.brandId,
-            supercategoryId: data.supercategoryId,
-            categoryId: data.categoryId,
-            subcategoryId: data.subcategoryId,
-            description: data.description
-          }
+          id: id!, 
+          product: productData
         },
         {
           onSuccess: () => {
@@ -107,7 +98,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
     reset,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors, dirtyFields },
   } = useForm<Product>({
     resolver: zodResolver(productFormSchema),
     defaultValues: product ? {
@@ -148,24 +139,39 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
     : [];
 
   useEffect(() => {
-    if (supercategoryId) {
+    if (dirtyFields.supercategoryId) {
       setValue('categoryId', '');
       setValue('subcategoryId', '');
     }
-  }, [supercategoryId, setValue]);
+  }, [supercategoryId, dirtyFields.supercategoryId, setValue]);
 
   useEffect(() => {
-    if (categoryId) {
+    if (dirtyFields.categoryId) {
       setValue('subcategoryId', '');
     }
-  }, [categoryId, setValue]);
+  }, [categoryId, dirtyFields.categoryId, setValue]);
 
-  // Reset form when opening/closing
+  // Reset form when the drawer opens or the product to edit changes
   useEffect(() => {
     if (open) {
-      reset();
+      if (product) {
+        reset(product);
+      } else {
+        reset({
+          name: '',
+          sku: '',
+          description: '',
+          price: 0,
+          stock: 0,
+          imgUrl: '',
+          brandId: '',
+          supercategoryId: '',
+          categoryId: '',
+          subcategoryId: ''
+        });
+      }
     }
-  }, [open, reset]);
+  }, [open, product, reset]);
 
   const onSubmit: SubmitHandler<Product> = (data) => {
     handleSubmitForm(data);
@@ -251,6 +257,10 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    onChange={(e) => {
+                      const value = parseFloat(e.target.value);
+                      field.onChange(isNaN(value) ? '' : value);
+                    }}
                     size="small"
                     label="Precio"
                     type="number"
@@ -260,7 +270,6 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     margin="dense"
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                      inputProps: { min: 0, step: '0.01' }
                     }}
                   />
                 )}
@@ -271,6 +280,10 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                 render={({ field }) => (
                   <TextField
                     {...field}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10);
+                      field.onChange(isNaN(value) ? '' : value);
+                    }}
                     size="small"
                     label="Stock"
                     type="number"
@@ -278,7 +291,6 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     helperText={errors.stock?.message as string}
                     fullWidth
                     margin="dense"
-                    inputProps={{ min: 0 }}
                   />
                 )}
               />

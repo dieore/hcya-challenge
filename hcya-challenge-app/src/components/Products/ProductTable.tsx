@@ -1,6 +1,7 @@
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { Box, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import type { GridColDef, GridPaginationModel, GridSortModel, GridRowParams } from '@mui/x-data-grid';
 import type { Product } from '../../schemas/productSchema';
@@ -18,6 +19,7 @@ interface ProductTableProps {
   onPaginationModelChange: (model: GridPaginationModel) => void;
   onSortModelChange?: (model: GridSortModel) => void;
   onEdit?: (product: Product) => void;
+  onDelete?: (product: Product) => void;
 }
 
 export default function ProductTable({
@@ -29,6 +31,7 @@ export default function ProductTable({
   sortModel = [{ field: 'name', sort: 'asc' }],
   onSortModelChange = () => {},
   onEdit,
+  onDelete,
 }: ProductTableProps) {
   const columns: GridColDef<Product>[] = [
     {
@@ -90,6 +93,19 @@ export default function ProductTable({
       valueFormatter: (value: number) => `$${value.toFixed(2)}`
     },
     {
+      field: 'imgUrl',
+      headerName: 'Imagen',
+      width: 100,
+      renderCell: (params) => (
+        <img 
+          src={params.value} 
+          alt={params.row.name} 
+          style={{ width: '100%', height: 'auto', objectFit: 'cover' }} 
+        />
+      ),
+      sortable: false,
+    },
+    {
       field: 'stock',
       headerName: 'Stock',
       type: 'number',
@@ -102,7 +118,7 @@ export default function ProductTable({
       headerName: 'Acciones',
       width: 100,
       cellClassName: 'actions',
-      getActions: (params: GridRowParams) => [
+      getActions: (params: GridRowParams<Product>) => [
         <GridActionsCellItem
           key="edit"
           icon={
@@ -111,8 +127,19 @@ export default function ProductTable({
             </IconButton>
           }
           label="Editar"
-          onClick={() => onEdit?.(params.row as Product)}
-          showInMenu={false}
+          onClick={() => onEdit?.(params.row)}
+          showInMenu={true}
+        />,
+        <GridActionsCellItem
+          key="delete"
+          icon={
+            <IconButton>
+              <DeleteIcon />
+            </IconButton>
+          }
+          label="Eliminar"
+          onClick={() => onDelete?.(params.row)}
+          showInMenu={true}
         />
       ]
     },
@@ -134,6 +161,7 @@ export default function ProductTable({
         sortingMode="server"
         getRowId={(row) => row.id!}
         disableColumnMenu
+        disableRowSelectionOnClick
       />
     </Box>
   );

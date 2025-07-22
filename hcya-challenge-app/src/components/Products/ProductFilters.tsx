@@ -1,4 +1,4 @@
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, Button, ButtonGroup, Typography } from "@mui/material";
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, Button } from "@mui/material";
 import { useBrands } from "../../hooks/brands";
 import { useCategories } from "../../hooks/categories";
 import { useSubcategories } from "../../hooks/subcategories";
@@ -233,7 +233,6 @@ export default function ProductFilters({
             );
           }
 
-          // At this point, we know it's one of the array filter types
           const arrayFilterName = typedFilterName as Exclude<FilterName, 'price_gte' | 'price_lte'>;
           const filterValues = Array.isArray(values) ? values : [];
 

@@ -1,13 +1,16 @@
 import { Typography, Box, Button } from "@mui/material";
 import { useDebounce } from "../hooks/useDebounce";
-import { useProducts } from "../hooks/products";
+import { useProducts, useDeleteProduct } from "../hooks/products";
 import { useState, useCallback } from "react";
-import type { Product } from "../schemas/productSchema";
+import { useAppDispatch } from "../store/hooks";
+import { showSnackbar } from "../store/snackbar/snackbarSlice";
 import ProductTable from "../components/Products/ProductTable";
 import ProductFilters from "../components/Products/ProductFilters";
 import ProductForm from "../components/Products/ProductForm";
+import ConfirmationModal from "../components/common/ConfirmationModal";
 import AddIcon from '@mui/icons-material/Add';
 
+import type { Product } from "../schemas/productSchema";
 import type { FilterName } from "../components/Products/ProductFilters";
 import type { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 
@@ -93,6 +96,8 @@ export default function Products() {
   };
 
   const { data: products, error, isLoading } = useProducts(queryParams);
+  const { mutate: deleteProduct } = useDeleteProduct();
+  const dispatch = useAppDispatch();
 
   if (error) {
     return (
@@ -109,6 +114,7 @@ export default function Products() {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
@@ -123,6 +129,32 @@ export default function Products() {
   const handleSuccess = () => {
     setIsFormOpen(false);
     setEditingProduct(null);
+  };
+
+  const handleDelete = (product: Product) => {
+    setDeletingProduct(product);
+  };
+
+  const handleConfirmDelete = () => {
+    if (deletingProduct) {
+      deleteProduct(deletingProduct.id!, {
+        onSuccess: () => {
+          dispatch(showSnackbar({ 
+            message: 'Producto eliminado exitosamente',
+            severity: 'success'
+          }));
+          setDeletingProduct(null);
+        },
+        onError: (error: Error) => {
+          console.error('Error deleting product:', error);
+          dispatch(showSnackbar({ 
+            message: 'Error al eliminar el producto',
+            severity: 'error'
+          }));
+          setDeletingProduct(null);
+        }
+      });
+    }
   };
 
   return (
@@ -159,6 +191,7 @@ export default function Products() {
           sortModel={sortModel}
           onSortModelChange={setSortModel}
           onEdit={handleEdit}
+          onDelete={handleDelete}
         />
       </Box>
       
@@ -167,6 +200,14 @@ export default function Products() {
         onClose={handleFormClose}
         onSuccess={handleSuccess}
         product={editingProduct}
+      />
+
+      <ConfirmationModal
+        open={!!deletingProduct}
+        onClose={() => setDeletingProduct(null)}
+        onConfirm={handleConfirmDelete}
+        title="Confirmar Eliminación"
+        message={`¿Estás seguro de que deseas eliminar el producto "${deletingProduct?.name}"?`}
       />
     </Box>
   );
