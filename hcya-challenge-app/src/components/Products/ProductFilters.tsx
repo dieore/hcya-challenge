@@ -61,7 +61,7 @@ export default function ProductFilters({
     const currentMax = filters.price_lte ? Number(filters.price_lte) : null;
 
     if (max === Infinity) {
-      return currentMin === min && currentMax === undefined;
+      return currentMin === min && !currentMax;
     }
 
     return currentMin === min && currentMax === max;
