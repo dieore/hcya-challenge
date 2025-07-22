@@ -1,9 +1,11 @@
-import { Typography, Box, CircularProgress } from "@mui/material";
+import { Typography, Box, CircularProgress, Button } from "@mui/material";
 import { useDebounce } from "../hooks/useDebounce";
 import { useProducts } from "../hooks/products";
 import { useState, useCallback } from "react";
 import ProductTable from "../components/Products/ProductTable";
 import ProductFilters from "../components/Products/ProductFilters";
+import ProductForm from "../components/Products/ProductForm";
+import AddIcon from '@mui/icons-material/Add';
 
 import type { FilterName } from "../components/Products/ProductFilters";
 import type { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
@@ -105,15 +107,26 @@ export default function Products() {
     );
   }
 
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
     <Box p={2}>
-      <Box display="flex" alignItems="center" justifyContent="space-between" gap={2} mb={2}>
-        <Typography variant="h4">
-          Productos
-        </Typography>
-        <Typography variant="h6">
-          Resultados totales: {isLoading ? <CircularProgress size={16} /> : products?.total}
-        </Typography>
+      <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-between" gap={2} mb={2}>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Typography variant="h4">
+            Productos
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+            {isLoading ? <CircularProgress size={16} /> : `Resultados totales: ${products?.total || 0}`}
+          </Typography>
+        </Box>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setIsFormOpen(true)}
+        >
+          Nuevo Producto
+        </Button>
       </Box>
 
       <ProductFilters
@@ -136,6 +149,11 @@ export default function Products() {
           onSortModelChange={setSortModel}
         />
       </Box>
+      
+      <ProductForm 
+        open={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+      />
     </Box>
   );
 }
