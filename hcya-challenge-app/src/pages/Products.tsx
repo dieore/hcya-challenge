@@ -112,14 +112,9 @@ export default function Products() {
   return (
     <Box p={2}>
       <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-between" gap={2} mb={2}>
-        <Box display="flex" alignItems="center" gap={2}>
-          <Typography variant="h4">
-            Productos
-          </Typography>
-          <Typography variant="h6" color="text.secondary">
-            {isLoading ? <CircularProgress size={16} /> : `Resultados totales: ${products?.total || 0}`}
-          </Typography>
-        </Box>
+        <Typography variant="h6">
+          Total de productos: {products?.total ? products?.total : '...'}
+        </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}

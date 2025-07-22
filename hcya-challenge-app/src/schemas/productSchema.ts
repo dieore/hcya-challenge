@@ -17,6 +17,7 @@ export const productFormSchema = z.object({
       message: 'El stock no puede ser negativo'
     }),
   imgUrl: z.string()
+    .min(1, 'La URL de la imagen es requerida')
     .refine(val => !val || val === '' || /^https?:\/\//.test(val), {
       message: 'Debe ser una URL válida que comience con http:// o https://',
     }),

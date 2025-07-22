@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productFormSchema, mapFormDataToApiData } from '../../schemas/productSchema';
+import { useAppDispatch } from '../../store/hooks';
+import { showSnackbar } from '../../store/snackbar/snackbarSlice';
 import { 
   Drawer, 
   Box, 
@@ -45,11 +47,32 @@ interface ProductFormProps {
 }
 
 export default function ProductForm({ open, onClose, onSuccess }: ProductFormProps) {
+  const dispatch = useAppDispatch();
   const { data: brands = [] } = useBrands();
   const { data: supercategories = [] } = useSupercategories();
   const { data: categories = [] } = useCategories();
   const { data: subcategories = [] } = useSubcategories();
   const { mutate: createProduct, isPending } = useCreateProduct();
+  
+  const handleCreateProduct = (data: any) => {
+    createProduct(data, {
+      onSuccess: () => {
+        dispatch(showSnackbar({ 
+          message: 'Producto creado exitosamente',
+          severity: 'success' as const
+        }));
+        onClose();
+        onSuccess?.();
+      },
+      onError: (error: Error) => {
+        console.error('Error creating product:', error);
+        dispatch(showSnackbar({ 
+          message: 'Error al crear el producto',
+          severity: 'error' as const
+        }));
+      }
+    });
+  };
 
   const {
     control,
@@ -70,7 +93,7 @@ export default function ProductForm({ open, onClose, onSuccess }: ProductFormPro
       brandId: '',
       supercategoryId: '',
       categoryId: '',
-      subcategoryId: undefined
+      subcategoryId: ''
     },
     mode: 'all'
   });
@@ -78,17 +101,14 @@ export default function ProductForm({ open, onClose, onSuccess }: ProductFormPro
   const supercategoryId = watch('supercategoryId');
   const categoryId = watch('categoryId');
 
-  // Filter categories based on selected supercategory
   const filteredCategories = supercategoryId
     ? categories.filter(cat => cat.supercategoryId === Number(supercategoryId))
     : [];
 
-  // Filter subcategories based on selected category
   const filteredSubcategories = categoryId
     ? subcategories.filter(sub => sub.categoryId === Number(categoryId))
     : [];
 
-  // Reset dependent fields when parent changes
   useEffect(() => {
     if (supercategoryId) {
       setValue('categoryId', '');
@@ -110,24 +130,8 @@ export default function ProductForm({ open, onClose, onSuccess }: ProductFormPro
   }, [open, reset]);
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    // Convert form data to API data format
-    const apiData = mapFormDataToApiData(data);
-    
-    // Create the product with properly typed data
-    createProduct({
-      ...apiData,
-      description: apiData.description || '',
-      imgUrl: apiData.imgUrl || ''
-    }, {
-      onSuccess: () => {
-        onClose();
-        onSuccess?.();
-      },
-      onError: (error) => {
-        console.error('Error creating product:', error);
-        // Handle API validation errors here if needed
-      }
-    });
+    const apiData = mapFormDataToApiData(data);    
+    handleCreateProduct(apiData);
   };
 
   return (
@@ -143,7 +147,7 @@ export default function ProductForm({ open, onClose, onSuccess }: ProductFormPro
       }}
     >
       <Box sx={{ p: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ px: 3, py: 1, position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 1, borderBottom: '1px solid', borderColor: 'divider' }}>
+        <Box sx={{ px: 3, py: 1, position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="h6">
               Nuevo Producto
