@@ -1,4 +1,5 @@
 import { useBaseQuery } from '../useBaseQuery';
+import { useQueryClient } from '@tanstack/react-query';
 import { useBaseMutation } from '../useBaseMutation';
 import type { 
   ProductQueryParams, 
@@ -33,19 +34,40 @@ export const useProduct = (id: string | undefined) => {
 };
 
 export const useCreateProduct = () => {
+  const queryClient = useQueryClient();
+
   return useBaseMutation<Product, Error, Product>(
-    (product: Product) => productService.create(product as Omit<Product, 'id'>)
+    (product: Product) => productService.create(product as Omit<Product, 'id'>),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [PRODUCTS_QUERY_KEY] });
+      },
+    }
   );
 };
 
 export const useUpdateProduct = () => {
+  const queryClient = useQueryClient();
+
   return useBaseMutation<Product, Error, UpdateProductVariables>(
-    ({ id, product }: UpdateProductVariables) => productService.update(id, product as Partial<Product>)
+    ({ id, product }: UpdateProductVariables) => productService.update(id, product as Partial<Product>),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [PRODUCTS_QUERY_KEY] });
+      },
+    }
   );
 };
 
 export const useDeleteProduct = () => {
+  const queryClient = useQueryClient();
+
   return useBaseMutation<void, Error, string>(
-    (id: string) => productService.delete(id)
+    (id: string) => productService.delete(id),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: [PRODUCTS_QUERY_KEY] });
+      },
+    }
   );
 };

@@ -190,20 +190,18 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
       }}
     >
       <Box sx={{ p: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ px: 3, py: 1, position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
-              {isEditing ? 'Editar Producto' : 'Nuevo Producto'}
-            </Typography>
-            <IconButton onClick={onClose} edge="end" aria-label="close">
-              <CloseIcon />
-            </IconButton>
-          </Box>
+        <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ px: 3, py: 1, position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
+          <Typography variant="h6" component="h2">
+            {isEditing ? 'Editar Producto' : 'Nuevo Producto'}
+          </Typography>
+          <IconButton onClick={onClose} edge="end" aria-label="close">
+            <CloseIcon />
+          </IconButton>
         </Box>
 
         <form onSubmit={handleSubmit(onSubmit)} style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
           <Box sx={{ p: 2, flex: 1, overflowY: 'auto' }}>
-            <Stack spacing={1.5}>
+            <Stack spacing={2}>
               <Controller
                 name="name"
                 control={control}
@@ -215,7 +213,6 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     error={!!errors.name}
                     helperText={errors.name?.message as string}
                     fullWidth
-                    margin="dense"
                   />
                 )}
               />
@@ -230,7 +227,6 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     error={!!errors.sku}
                     helperText={errors.sku?.message as string}
                     fullWidth
-                    margin="dense"
                   />
                 )}
               />
@@ -247,7 +243,6 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     fullWidth
                     multiline
                     rows={2}
-                    margin="dense"
                   />
                 )}
               />
@@ -259,7 +254,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     {...field}
                     onChange={(e) => {
                       const value = parseFloat(e.target.value);
-                      field.onChange(isNaN(value) ? '' : value);
+                      field.onChange(isNaN(value) ? 0 : value);
                     }}
                     size="small"
                     label="Precio"
@@ -267,7 +262,6 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     error={!!errors.price}
                     helperText={errors.price?.message as string}
                     fullWidth
-                    margin="dense"
                     InputProps={{
                       startAdornment: <InputAdornment position="start">$</InputAdornment>,
                     }}
@@ -282,7 +276,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     {...field}
                     onChange={(e) => {
                       const value = parseInt(e.target.value, 10);
-                      field.onChange(isNaN(value) ? '' : value);
+                      field.onChange(isNaN(value) ? 0 : value);
                     }}
                     size="small"
                     label="Stock"
@@ -290,7 +284,6 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     error={!!errors.stock}
                     helperText={errors.stock?.message as string}
                     fullWidth
-                    margin="dense"
                   />
                 )}
               />
@@ -305,7 +298,6 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                     error={!!errors.imgUrl}
                     helperText={errors.imgUrl?.message as string}
                     fullWidth
-                    margin="dense"
                   />
                 )}
               />
@@ -313,7 +305,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                 name="brandId"
                 control={control}
                 render={({ field }) => (
-                  <FormControl fullWidth size="small" margin="dense" error={!!errors.brandId}>
+                  <FormControl fullWidth size="small"  error={!!errors.brandId}>
                     <InputLabel>Marca</InputLabel>
                     <Select
                       {...field}
@@ -326,7 +318,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                       ))}
                     </Select>
                     {errors.brandId && (
-                      <FormHelperText sx={{ color: 'error.main' }}>{errors.brandId?.message as string}</FormHelperText>
+                      <FormHelperText sx={{ color: 'error.main' }}>{errors.brandId?.message}</FormHelperText>
                     )}
                   </FormControl>
                 )}
@@ -335,7 +327,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                 name="supercategoryId"
                 control={control}
                 render={({ field }) => (
-                  <FormControl fullWidth size="small" margin="dense" error={!!errors.supercategoryId}>
+                  <FormControl fullWidth size="small"  error={!!errors.supercategoryId}>
                     <InputLabel>Supercategoría</InputLabel>
                     <Select
                       {...field}
@@ -348,7 +340,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                       ))}
                     </Select>
                     {errors.supercategoryId && (
-                      <FormHelperText sx={{ color: 'error.main' }}>{errors.supercategoryId?.message as string}</FormHelperText>
+                      <FormHelperText sx={{ color: 'error.main' }}>{errors.supercategoryId?.message}</FormHelperText>
                     )}
                   </FormControl>
                 )}
@@ -357,7 +349,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                 name="categoryId"
                 control={control}
                 render={({ field }) => (
-                  <FormControl fullWidth size="small" margin="dense" error={!!errors.categoryId}>
+                  <FormControl fullWidth size="small"  error={!!errors.categoryId}>
                     <InputLabel>Categoría</InputLabel>
                     <Select
                       {...field}
@@ -371,7 +363,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                       ))}
                     </Select>
                     {errors.categoryId && (
-                      <FormHelperText sx={{ color: 'error.main' }}>{errors.categoryId?.message as string}</FormHelperText>
+                      <FormHelperText sx={{ color: 'error.main' }}>{errors.categoryId?.message}</FormHelperText>
                     )}
                   </FormControl>
                 )}
@@ -380,7 +372,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                 name="subcategoryId"
                 control={control}
                 render={({ field }) => (
-                  <FormControl fullWidth size="small" margin="dense" error={!!errors.subcategoryId}>
+                  <FormControl fullWidth size="small"  error={!!errors.subcategoryId}>
                     <InputLabel>Subcategoría</InputLabel>
                     <Select
                       {...field}
@@ -394,7 +386,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                       ))}
                     </Select>
                     {errors.subcategoryId && (
-                      <FormHelperText sx={{ color: 'error.main' }}>{errors.subcategoryId?.message as string}</FormHelperText>
+                      <FormHelperText sx={{ color: 'error.main' }}>{errors.subcategoryId?.message}</FormHelperText>
                     )}
                   </FormControl>
                 )}
