@@ -1,8 +1,8 @@
 import { Typography, Box, Button } from "@mui/material";
 import { useDebounce } from "../hooks/useDebounce";
 import { useProducts, useDeleteProduct } from "../hooks/products";
-import { useState, useCallback } from "react";
-import { useAppDispatch } from "../store/hooks";
+import { useState, useCallback, useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { showSnackbar } from "../store/snackbar/snackbarSlice";
 import ProductTable from "../components/Products/ProductTable";
 import ProductFilters from "../components/Products/ProductFilters";
@@ -38,6 +38,47 @@ export default function Products() {
     price_gte: string;
     price_lte: string;
   }
+
+  const queryParams = {
+    name_like: debouncedSearch,
+    _page: paginationModel.page + 1,
+    _limit: paginationModel.pageSize,
+    _sort: sortModel[0]?.field || 'name',
+    _order: sortModel[0]?.sort || 'asc',
+    brandId: filters.brandId,
+    categoryId: filters.categoryId,
+    subcategoryId: filters.subcategoryId,
+    supercategoryId: filters.supercategoryId,
+    ...(filters.price_gte ? { price_gte: Number(filters.price_gte) } : {}),
+    ...(filters.price_lte ? { price_lte: Number(filters.price_lte) } : {})
+  };
+
+  const { data: products, error, isLoading, refetch } = useProducts(queryParams);
+  const { mutate: deleteProduct } = useDeleteProduct();
+  const dispatch = useAppDispatch();
+
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product);
+    setIsFormOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setIsFormOpen(false);
+    setEditingProduct(null);
+  };
+
+  const handleSuccess = () => {
+    setIsFormOpen(false);
+    setEditingProduct(null);
+  };
+
+  const handleDelete = (product: Product) => {
+    setDeletingProduct(product);
+  };
 
   const handleFilterChange = useCallback((filterName: FilterName, newValue: string | string[]) => {
     setFilters(prev => {
@@ -81,60 +122,6 @@ export default function Products() {
     }
   }, []);
 
-  const queryParams = {
-    name_like: debouncedSearch,
-    _page: paginationModel.page + 1,
-    _limit: paginationModel.pageSize,
-    _sort: sortModel[0]?.field || 'name',
-    _order: sortModel[0]?.sort || 'asc',
-    brandId: filters.brandId,
-    categoryId: filters.categoryId,
-    subcategoryId: filters.subcategoryId,
-    supercategoryId: filters.supercategoryId,
-    ...(filters.price_gte ? { price_gte: Number(filters.price_gte) } : {}),
-    ...(filters.price_lte ? { price_lte: Number(filters.price_lte) } : {})
-  };
-
-  const { data: products, error, isLoading } = useProducts(queryParams);
-  const { mutate: deleteProduct } = useDeleteProduct();
-  const dispatch = useAppDispatch();
-
-  if (error) {
-    return (
-      <Box p={2}>
-        <Typography variant="h4" gutterBottom>
-          Error
-        </Typography>
-        <Typography>
-          Ha ocurrido un error al cargar los productos.
-        </Typography>
-      </Box>
-    );
-  }
-
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
-
-  const handleEdit = (product: Product) => {
-    setEditingProduct(product);
-    setIsFormOpen(true);
-  };
-
-  const handleFormClose = () => {
-    setIsFormOpen(false);
-    setEditingProduct(null);
-  };
-
-  const handleSuccess = () => {
-    setIsFormOpen(false);
-    setEditingProduct(null);
-  };
-
-  const handleDelete = (product: Product) => {
-    setDeletingProduct(product);
-  };
-
   const handleConfirmDelete = () => {
     if (deletingProduct) {
       deleteProduct(deletingProduct.id!, {
@@ -156,6 +143,29 @@ export default function Products() {
       });
     }
   };
+
+  const isActive = useAppSelector((state) => state.tabs.activeTabId === 'products');
+
+  useEffect(() => {
+    if (!isActive) return;
+  
+    refetch({
+      cancelRefetch: false // fuerza que se dispare incluso si ya había uno andando
+    });
+  }, [isActive]);
+
+  if (error) {
+    return (
+      <Box p={2}>
+        <Typography variant="h4" gutterBottom>
+          Error
+        </Typography>
+        <Typography>
+          Ha ocurrido un error al cargar los productos.
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box p={2}>

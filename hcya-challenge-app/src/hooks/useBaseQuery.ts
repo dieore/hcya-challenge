@@ -2,15 +2,15 @@ import { useQuery } from '@tanstack/react-query';
 import type { UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 
 const DEFAULT_QUERY_OPTIONS = {
-  gcTime: 0, // Disable caching
-  staleTime: 0, // Always consider data as stale
-  refetchOnWindowFocus: false, // Don't refetch on window focus
-  refetchOnMount: true, // Refetch when component mounts
-  refetchOnReconnect: false // Don't refetch on reconnect
+  gcTime: 10 * 60 * 1000, // 10 minutes
+  staleTime: 0,
+  refetchOnWindowFocus: true,
+  refetchOnMount: true,
+  refetchOnReconnect: false
 } as const;
 
 export const useBaseQuery = <TData = unknown, TError = Error, TParams = void | undefined>(
-  queryKey: unknown[], 
+  queryKey: unknown[],
   queryFn: (params: TParams) => Promise<TData>,
   params?: TParams,
   options: Omit<UseQueryOptions<TData, TError>, 'queryKey' | 'queryFn'> = {}
