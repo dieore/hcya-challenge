@@ -1,7 +1,8 @@
-import { Typography, Box, CircularProgress, Button } from "@mui/material";
+import { Typography, Box, Button } from "@mui/material";
 import { useDebounce } from "../hooks/useDebounce";
 import { useProducts } from "../hooks/products";
 import { useState, useCallback } from "react";
+import type { Product } from "../schemas/productSchema";
 import ProductTable from "../components/Products/ProductTable";
 import ProductFilters from "../components/Products/ProductFilters";
 import ProductForm from "../components/Products/ProductForm";
@@ -34,7 +35,6 @@ export default function Products() {
     price_gte: string;
     price_lte: string;
   }
-
 
   const handleFilterChange = useCallback((filterName: FilterName, newValue: string | string[]) => {
     setFilters(prev => {
@@ -108,6 +108,22 @@ export default function Products() {
   }
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+  const handleEdit = (product: Product) => {
+    setEditingProduct(product);
+    setIsFormOpen(true);
+  };
+
+  const handleFormClose = () => {
+    setIsFormOpen(false);
+    setEditingProduct(null);
+  };
+
+  const handleSuccess = () => {
+    setIsFormOpen(false);
+    setEditingProduct(null);
+  };
 
   return (
     <Box p={2}>
@@ -142,12 +158,15 @@ export default function Products() {
           onPaginationModelChange={setPaginationModel}
           sortModel={sortModel}
           onSortModelChange={setSortModel}
+          onEdit={handleEdit}
         />
       </Box>
       
       <ProductForm 
         open={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
+        onClose={handleFormClose}
+        onSuccess={handleSuccess}
+        product={editingProduct}
       />
     </Box>
   );

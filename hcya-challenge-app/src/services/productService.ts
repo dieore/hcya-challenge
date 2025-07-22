@@ -1,38 +1,6 @@
 import api from "../config/api";
-import type { Brand } from "./brandService";
-import type { Category } from "./categoryService";
-import type { Subcategory } from "./subcategoryService";
+import type { Product } from "../schemas/productSchema";
 
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  stock: number;
-  description: string;
-  sku: string;
-  imgUrl: string;
-  brandId: number;
-  brand?: Brand;
-  subcategoryId: number;
-  subcategory?: Subcategory;
-  categoryId: number;
-  category?: Category;
-  supercategoryId: number;
-}
-
-export interface NewProduct {
-  id?: string;
-  name: string;
-  price: number;
-  stock: number;
-  description: string;
-  sku: string;
-  imgUrl: string;
-  brandId: string;
-  subcategoryId: string;
-  categoryId: string;
-  supercategoryId: string;
-}
 export interface ProductQueryParams {
   _sort?: string;
   _order?: "asc" | "desc";
@@ -50,38 +18,6 @@ export interface ProductQueryParams {
   price_gte?: number;
   price_lte?: number;
 }
-
-export const initialProductFilters: ProductQueryParams = {
-  _sort: "name",
-  _order: "asc",
-  _page: 1,
-  _limit: 10,
-  brandId: [],
-  categoryId: [],
-  subcategoryId: [],
-  supercategoryId: [],
-  name_like: "",
-  description_like: "",
-  sku_like: "",
-  stock_gte: undefined,
-  stock_lte: undefined,
-  price_gte: undefined,
-  price_lte: undefined,
-};
-
-export const initialNewProduct = {
-  id: "",
-  name: "",
-  price: 0,
-  stock: 0,
-  description: "",
-  sku: "",
-  imgUrl: "",
-  brandId: "",
-  subcategoryId: "",
-  categoryId: "",
-  supercategoryId: "",
-};
 
 export interface ProductResponse {
   data: Product[];

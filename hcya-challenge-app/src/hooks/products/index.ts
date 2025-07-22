@@ -1,17 +1,16 @@
 import { useBaseQuery } from '../useBaseQuery';
 import { useBaseMutation } from '../useBaseMutation';
 import type { 
-  Product, 
-  NewProduct, 
   ProductQueryParams, 
   ProductResponse 
 } from '../../services/productService';
 import { productService } from '../../services';
 import { PRODUCTS_QUERY_KEY } from '../../constants/queryKeys';
+import type { Product } from '../../schemas/productSchema';
 
-type UpdateProductVariables = {
+export type UpdateProductVariables = {
   id: string;
-  product: Partial<NewProduct>;
+  product: Partial<Product>;
 };
 
 export const useProducts = (params: ProductQueryParams = {}) => {
@@ -34,8 +33,8 @@ export const useProduct = (id: string | undefined) => {
 };
 
 export const useCreateProduct = () => {
-  return useBaseMutation<Product, Error, NewProduct>(
-    (product: NewProduct) => productService.create(product as unknown as Omit<Product, 'id'>)
+  return useBaseMutation<Product, Error, Product>(
+    (product: Product) => productService.create(product as Omit<Product, 'id'>)
   );
 };
 

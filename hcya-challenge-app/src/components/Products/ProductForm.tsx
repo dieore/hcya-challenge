@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useForm, Controller, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { productFormSchema, mapFormDataToApiData } from '../../schemas/productSchema';
+import { productFormSchema, type Product } from '../../schemas/productSchema';
 import { useAppDispatch } from '../../store/hooks';
 import { showSnackbar } from '../../store/snackbar/snackbarSlice';
 import { 
@@ -25,53 +25,80 @@ import { useBrands } from '../../hooks/brands';
 import { useSupercategories } from '../../hooks/supercategories';
 import { useCategories } from '../../hooks/categories';
 import { useSubcategories } from '../../hooks/subcategories';
-import { useCreateProduct } from '../../hooks/products';
-
-type FormValues = {
-  name: string;
-  sku: string;
-  description: string;
-  price: string;
-  stock: string;
-  imgUrl: string;
-  brandId: string;
-  supercategoryId: string;
-  categoryId: string;
-  subcategoryId: string;
-};
+import { useCreateProduct, useUpdateProduct } from '../../hooks/products';
 
 interface ProductFormProps {
   open: boolean;
   onClose: () => void;
   onSuccess?: () => void;
+  product?: Product | null;
 }
 
-export default function ProductForm({ open, onClose, onSuccess }: ProductFormProps) {
+export default function ProductForm({ open, onClose, onSuccess, product }: ProductFormProps) {
   const dispatch = useAppDispatch();
   const { data: brands = [] } = useBrands();
   const { data: supercategories = [] } = useSupercategories();
   const { data: categories = [] } = useCategories();
   const { data: subcategories = [] } = useSubcategories();
-  const { mutate: createProduct, isPending } = useCreateProduct();
+  const { mutate: createProduct, isPending: isCreating } = useCreateProduct();
+  const { mutate: updateProduct, isPending: isUpdating } = useUpdateProduct();
+  const isEditing = !!product?.id;
   
-  const handleCreateProduct = (data: any) => {
-    createProduct(data, {
-      onSuccess: () => {
-        dispatch(showSnackbar({ 
-          message: 'Producto creado exitosamente',
-          severity: 'success' as const
-        }));
-        onClose();
-        onSuccess?.();
-      },
-      onError: (error: Error) => {
-        console.error('Error creating product:', error);
-        dispatch(showSnackbar({ 
-          message: 'Error al crear el producto',
-          severity: 'error' as const
-        }));
-      }
-    });
+  const handleSubmitForm = (data: Product) => {    
+    if (isEditing && product) {
+      updateProduct(
+        { 
+          id: product.id!, 
+          product: {
+            name: data.name,
+            sku: data.sku,
+            price: data.price,
+            stock: data.stock,
+            imgUrl: data.imgUrl,
+            brandId: data.brandId,
+            supercategoryId: data.supercategoryId,
+            categoryId: data.categoryId,
+            subcategoryId: data.subcategoryId,
+            description: data.description
+          }
+        },
+        {
+          onSuccess: () => {
+            dispatch(showSnackbar({ 
+              message: 'Producto actualizado exitosamente',
+              severity: 'success' as const
+            }));
+            onClose();
+            onSuccess?.();
+          },
+          onError: (error: Error) => {
+            console.error('Error updating product:', error);
+            dispatch(showSnackbar({ 
+              message: 'Error al actualizar el producto',
+              severity: 'error' as const
+            }));
+          }
+        }
+      );
+    } else {
+      createProduct(data, {
+        onSuccess: () => {
+          dispatch(showSnackbar({ 
+            message: 'Producto creado exitosamente',
+            severity: 'success' as const
+          }));
+          onClose();
+          onSuccess?.();
+        },
+        onError: (error: Error) => {
+          console.error('Error creating product:', error);
+          dispatch(showSnackbar({ 
+            message: 'Error al crear el producto',
+            severity: 'error' as const
+          }));
+        }
+      });
+    }
   };
 
   const {
@@ -81,14 +108,25 @@ export default function ProductForm({ open, onClose, onSuccess }: ProductFormPro
     watch,
     setValue,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(productFormSchema as any),
-    defaultValues: {
+  } = useForm<Product>({
+    resolver: zodResolver(productFormSchema),
+    defaultValues: product ? {
+      name: product.name,
+      sku: product.sku,
+      description: product.description,
+      price: product.price,
+      stock: product.stock,
+      imgUrl: product.imgUrl,
+      brandId: product.brandId,
+      supercategoryId: product.supercategoryId,
+      categoryId: product.categoryId,
+      subcategoryId: product.subcategoryId
+    } : {
       name: '',
       sku: '',
       description: '',
-      price: '0',
-      stock: '0',
+      price: 0,
+      stock: 0,
       imgUrl: '',
       brandId: '',
       supercategoryId: '',
@@ -129,9 +167,8 @@ export default function ProductForm({ open, onClose, onSuccess }: ProductFormPro
     }
   }, [open, reset]);
 
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    const apiData = mapFormDataToApiData(data);    
-    handleCreateProduct(apiData);
+  const onSubmit: SubmitHandler<Product> = (data) => {
+    handleSubmitForm(data);
   };
 
   return (
@@ -149,8 +186,8 @@ export default function ProductForm({ open, onClose, onSuccess }: ProductFormPro
       <Box sx={{ p: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Box sx={{ px: 3, py: 1, position: 'sticky', top: 0, bgcolor: 'background.paper', zIndex: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h6">
-              Nuevo Producto
+            <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+              {isEditing ? 'Editar Producto' : 'Nuevo Producto'}
             </Typography>
             <IconButton onClick={onClose} edge="end" aria-label="close">
               <CloseIcon />
@@ -360,21 +397,25 @@ export default function ProductForm({ open, onClose, onSuccess }: ProductFormPro
                 variant="outlined"
                 onClick={onClose}
                 color="inherit"
-                disabled={isPending}
+                disabled={isCreating || isUpdating}
                 size="large"
               >
                 Descartar
               </Button>
-              <Button
+              <Button 
                 fullWidth
-                type="submit"
-                variant="contained"
-                color="primary"
-                disabled={isPending}
                 size="large"
-                startIcon={isPending ? <CircularProgress size={20} /> : undefined}
+                type="submit" 
+                variant="contained" 
+                color="primary" 
+                disabled={isCreating || isUpdating}
+                startIcon={(isCreating || isUpdating) ? <CircularProgress size={20} /> : null}
               >
-                {isPending ? 'Creando...' : 'Crear'}
+                {(isCreating || isUpdating) 
+                  ? 'Guardando...' 
+                  : isEditing 
+                    ? 'Actualizar' 
+                    : 'Crear'}
               </Button>
             </Stack>
           </Box>

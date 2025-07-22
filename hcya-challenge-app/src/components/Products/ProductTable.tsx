@@ -1,8 +1,9 @@
-import { DataGrid } from '@mui/x-data-grid';
-import { Box } from '@mui/material';
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
+import { Box, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
 
-import type { GridColDef, GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
-import type { Product } from '../../services/productService';
+import type { GridColDef, GridPaginationModel, GridSortModel, GridRowParams } from '@mui/x-data-grid';
+import type { Product } from '../../schemas/productSchema';
 import type { Supercategory } from '../../services/supercategoryService';
 import type { Subcategory } from '../../services/subcategoryService';
 import type { Category } from '../../services/categoryService';
@@ -16,6 +17,7 @@ interface ProductTableProps {
   sortModel?: GridSortModel;
   onPaginationModelChange: (model: GridPaginationModel) => void;
   onSortModelChange?: (model: GridSortModel) => void;
+  onEdit?: (product: Product) => void;
 }
 
 export default function ProductTable({
@@ -26,6 +28,7 @@ export default function ProductTable({
   onPaginationModelChange,
   sortModel = [{ field: 'name', sort: 'asc' }],
   onSortModelChange = () => {},
+  onEdit,
 }: ProductTableProps) {
   const columns: GridColDef<Product>[] = [
     {
@@ -93,6 +96,26 @@ export default function ProductTable({
       sortable: true,
       flex: 1
     },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Acciones',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: (params: GridRowParams) => [
+        <GridActionsCellItem
+          key="edit"
+          icon={
+            <IconButton>
+              <EditIcon />
+            </IconButton>
+          }
+          label="Editar"
+          onClick={() => onEdit?.(params.row as Product)}
+          showInMenu={false}
+        />
+      ]
+    },
   ];
 
   return (
@@ -109,7 +132,7 @@ export default function ProductTable({
         pageSizeOptions={[5, 10, 25]}
         paginationMode="server"
         sortingMode="server"
-        getRowId={(row) => row.id}
+        getRowId={(row) => row.id!}
         disableColumnMenu
       />
     </Box>
