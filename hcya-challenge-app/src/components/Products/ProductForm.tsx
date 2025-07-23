@@ -4,6 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { productFormSchema, type Product } from '../../schemas/productSchema';
 import { useAppDispatch } from '../../store/hooks';
 import { showSnackbar } from '../../store/snackbar/snackbarSlice';
+import { setDirtyState } from '../../store/dirty/dirtySlice';
+import { openModal } from '../../store/modal/modalSlice';
 import { 
   Drawer, 
   Box, 
@@ -13,12 +15,12 @@ import {
   FormControl, 
   InputLabel, 
   Select, 
-  MenuItem, 
+  MenuItem,
   FormHelperText,
   CircularProgress,
   Stack,
   IconButton,
-  InputAdornment
+  InputAdornment,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useBrands } from '../../hooks/brands';
@@ -98,7 +100,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
     reset,
     watch,
     setValue,
-    formState: { errors, dirtyFields },
+    formState: { errors, isDirty },
   } = useForm<Product>({
     resolver: zodResolver(productFormSchema),
     defaultValues: product ? {
@@ -139,19 +141,18 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
     : [];
 
   useEffect(() => {
-    if (dirtyFields.supercategoryId) {
+    if (isDirty) {
       setValue('categoryId', '');
       setValue('subcategoryId', '');
     }
-  }, [supercategoryId, dirtyFields.supercategoryId, setValue]);
+  }, [supercategoryId, isDirty, setValue]);
 
   useEffect(() => {
-    if (dirtyFields.categoryId) {
+    if (isDirty) {
       setValue('subcategoryId', '');
     }
-  }, [categoryId, dirtyFields.categoryId, setValue]);
+  }, [categoryId, isDirty, setValue]);
 
-  // Reset form when the drawer opens or the product to edit changes
   useEffect(() => {
     if (open) {
       if (product) {
@@ -173,15 +174,35 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
     }
   }, [open, product, reset]);
 
+  useEffect(() => {
+    dispatch(setDirtyState({ model: 'products', key: 'productForm', isDirty }));
+  }, [dispatch, isDirty]);
+
   const onSubmit: SubmitHandler<Product> = (data) => {
     handleSubmitForm(data);
+    dispatch(setDirtyState({ model: 'products', key: 'productForm', isDirty: false }));
+  };
+
+  const handleClose = () => {
+    if (isDirty) {
+      dispatch(openModal({
+        title: 'Descartar cambios',
+        message: 'Tienes cambios sin guardar. ¿Estás seguro de que quieres descartarlos?',
+        onConfirm: () => {
+          onClose();
+          dispatch(setDirtyState({ model: 'products', key: 'productForm', isDirty: false }));
+        }
+      }));
+    } else {
+      onClose();
+    }
   };
 
   return (
     <Drawer
       anchor="right"
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       PaperProps={{
         sx: {
           width: { xs: '100%', sm: '500px' },
@@ -194,7 +215,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
           <Typography variant="h6" component="h2">
             {isEditing ? 'Editar Producto' : 'Nuevo Producto'}
           </Typography>
-          <IconButton onClick={onClose} edge="end" aria-label="close">
+          <IconButton onClick={handleClose} edge="end" aria-label="close">
             <CloseIcon />
           </IconButton>
         </Box>
@@ -399,27 +420,17 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
               <Button
                 fullWidth
                 variant="outlined"
-                onClick={onClose}
-                color="inherit"
-                disabled={isCreating || isUpdating}
-                size="large"
+                onClick={handleClose}
               >
                 Descartar
               </Button>
-              <Button 
+              <Button
                 fullWidth
-                size="large"
-                type="submit" 
-                variant="contained" 
-                color="primary" 
+                type="submit"
+                variant="contained"
                 disabled={isCreating || isUpdating}
-                startIcon={(isCreating || isUpdating) ? <CircularProgress size={20} /> : null}
               >
-                {(isCreating || isUpdating) 
-                  ? 'Guardando...' 
-                  : isEditing 
-                    ? 'Actualizar' 
-                    : 'Crear'}
+                {(isCreating || isUpdating) ? <CircularProgress size={24} color="inherit" /> : (isEditing ? 'Guardar Cambios' : 'Crear Producto')}
               </Button>
             </Stack>
           </Box>

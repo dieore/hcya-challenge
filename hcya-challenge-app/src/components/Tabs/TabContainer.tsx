@@ -2,11 +2,33 @@ import { Tabs, Tab, Box } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { setActiveTab, closeTab } from "../../store/tabs/tabsSlice";
+import { openModal } from '../../store/modal/modalSlice';
+import { setDirtyState } from '../../store/dirty/dirtySlice';
 import { sidebarItems } from "../Layout/SidebarItems";
 
 export default function TabContainer() {
   const { tabs, activeTabId } = useAppSelector((state) => state.tabs);
+  const dirtyState = useAppSelector((state) => state.dirty);
   const dispatch = useAppDispatch();
+
+  const handleCloseTab = (tabId: string) => {
+    const isDirty = Object.keys(dirtyState).find((model) => model === tabId);
+
+    if (isDirty) {
+      dispatch(openModal({
+        title: 'Descartar cambios',
+        message: 'Tienes progreso en esta pestaña. ¿Estás seguro de que quieres cerrarla?',
+        onConfirm: () => {
+          dispatch(closeTab(tabId));
+          Object.keys(dirtyState).forEach(key => {
+            dispatch(setDirtyState({ model: tabId, key, isDirty: false }));
+          });
+        }
+      }));
+    } else {
+      dispatch(closeTab(tabId));
+    }
+  };
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
@@ -26,7 +48,7 @@ export default function TabContainer() {
                   component="span"
                   onClick={(e) => {
                     e.stopPropagation();
-                    dispatch(closeTab(tab.id));
+                    handleCloseTab(tab.id);
                   }}
                   sx={{
                     ml: 1,
@@ -40,7 +62,7 @@ export default function TabContainer() {
                   onKeyDown={(e) => {
                     if (e.key === "Enter" || e.key === " ") {
                       e.preventDefault();
-                      dispatch(closeTab(tab.id));
+                      handleCloseTab(tab.id);
                     }
                   }}
                 >

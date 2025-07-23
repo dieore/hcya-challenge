@@ -27,3 +27,12 @@ export const productFormSchema = z.object({
 });
 
 export type Product = z.infer<typeof productFormSchema>;
+
+export interface Filters {
+  brandId: string[];
+  categoryId: string[];
+  subcategoryId: string[];
+  supercategoryId: string[];
+  price_gte: string;
+  price_lte: string;
+}

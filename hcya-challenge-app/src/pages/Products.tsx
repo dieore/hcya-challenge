@@ -1,43 +1,40 @@
 import { Typography, Box, Button } from "@mui/material";
 import { useDebounce } from "../hooks/useDebounce";
+import { isEqual } from 'lodash';
 import { useProducts, useDeleteProduct } from "../hooks/products";
 import { useState, useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { showSnackbar } from "../store/snackbar/snackbarSlice";
+import { openModal } from '../store/modal/modalSlice';
+import { setDirtyState } from '../store/dirty/dirtySlice';
 import ProductTable from "../components/Products/ProductTable";
 import ProductFilters from "../components/Products/ProductFilters";
 import ProductForm from "../components/Products/ProductForm";
-import ConfirmationModal from "../components/common/ConfirmationModal";
 import AddIcon from '@mui/icons-material/Add';
 
-import type { Product } from "../schemas/productSchema";
+import type { Product, Filters } from "../schemas/productSchema";
 import type { FilterName } from "../components/Products/ProductFilters";
 import type { GridPaginationModel, GridSortModel } from '@mui/x-data-grid';
 
+const initialPaginationModel: GridPaginationModel = { page: 0, pageSize: 10 };
+const initialSortModel: GridSortModel = [{ field: 'name', sort: 'asc' }];
+const initialFilters: Filters = {
+  brandId: [] as string[],
+  categoryId: [] as string[],
+  subcategoryId: [] as string[],
+  supercategoryId: [] as string[],
+  price_gte: '',
+  price_lte: ''
+};
+
 export default function Products() {
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({ page: 0, pageSize: 10 });
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'name', sort: 'asc' }]);
+  const [paginationModel, setPaginationModel] = useState(initialPaginationModel);
+  const [sortModel, setSortModel] = useState(initialSortModel);
 
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 700);
 
-  const [filters, setFilters] = useState({
-    brandId: [] as string[],
-    categoryId: [] as string[],
-    subcategoryId: [] as string[],
-    supercategoryId: [] as string[],
-    price_gte: '',
-    price_lte: ''
-  });
-
-  interface Filters {
-    brandId: string[];
-    categoryId: string[];
-    subcategoryId: string[];
-    supercategoryId: string[];
-    price_gte: string;
-    price_lte: string;
-  }
+  const [filters, setFilters] = useState(initialFilters);
 
   const queryParams = {
     name_like: debouncedSearch,
@@ -59,7 +56,7 @@ export default function Products() {
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
+
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product);
@@ -77,7 +74,27 @@ export default function Products() {
   };
 
   const handleDelete = (product: Product) => {
-    setDeletingProduct(product);
+    dispatch(openModal({
+      title: 'Confirmar Eliminación',
+      message: `¿Estás seguro de que deseas eliminar el producto "${product.name}"?`,
+      onConfirm: () => {
+        deleteProduct(product.id!, {
+          onSuccess: () => {
+            dispatch(showSnackbar({ 
+              message: 'Producto eliminado exitosamente',
+              severity: 'success'
+            }));
+          },
+          onError: (error: Error) => {
+            console.error('Error deleting product:', error);
+            dispatch(showSnackbar({ 
+              message: 'Error al eliminar el producto',
+              severity: 'error'
+            }));
+          }
+        });
+      }
+    }));
   };
 
   const handleFilterChange = useCallback((filterName: FilterName, newValue: string | string[]) => {
@@ -122,27 +139,17 @@ export default function Products() {
     }
   }, []);
 
-  const handleConfirmDelete = () => {
-    if (deletingProduct) {
-      deleteProduct(deletingProduct.id!, {
-        onSuccess: () => {
-          dispatch(showSnackbar({ 
-            message: 'Producto eliminado exitosamente',
-            severity: 'success'
-          }));
-          setDeletingProduct(null);
-        },
-        onError: (error: Error) => {
-          console.error('Error deleting product:', error);
-          dispatch(showSnackbar({ 
-            message: 'Error al eliminar el producto',
-            severity: 'error'
-          }));
-          setDeletingProduct(null);
-        }
-      });
-    }
-  };
+
+
+  useEffect(() => {
+    const hasPaginationChanged = !isEqual(paginationModel, initialPaginationModel);
+    const hasSortChanged = !isEqual(sortModel, initialSortModel);
+    const hasSearchChanged = search !== "";
+    const hasFiltersChanged = !isEqual(filters, initialFilters);
+
+    const isDirty = hasPaginationChanged || hasSortChanged || hasSearchChanged || hasFiltersChanged;
+    dispatch(setDirtyState({ model: 'products', key: 'productFilters', isDirty }));
+  }, [dispatch, paginationModel, sortModel, search, filters]);
 
   const isActive = useAppSelector((state) => state.tabs.activeTabId === 'products');
 
@@ -212,13 +219,7 @@ export default function Products() {
         product={editingProduct}
       />
 
-      <ConfirmationModal
-        open={!!deletingProduct}
-        onClose={() => setDeletingProduct(null)}
-        onConfirm={handleConfirmDelete}
-        title="Confirmar Eliminación"
-        message={`¿Estás seguro de que deseas eliminar el producto "${deletingProduct?.name}"?`}
-      />
+
     </Box>
   );
 }
