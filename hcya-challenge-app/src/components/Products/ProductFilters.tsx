@@ -106,22 +106,6 @@ export default function ProductFilters({
 
   return (
     <>
-      <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
-        {priceRanges.map((range) => {
-          const isActive = isPriceRangeActive(range.min, range.max);
-          return (
-            <Button
-              key={range.label}
-              variant={isActive ? 'contained' : 'outlined'}
-              onClick={() => handlePriceRangeClick(range.min, range.max)}
-            >
-              {range.label}
-            </Button>
-          );
-        })}
-      </Box>
-
-
       <Box display="flex" flexWrap="wrap" gap={2} mb={2}>
         <FormControl sx={{ width: 200 }} size="small">
           <TextField
@@ -244,6 +228,21 @@ export default function ProductFilters({
               sx={{ m: 0.5 }}
             />
           ));
+        })}
+      </Box>
+
+      <Box display="flex" flexWrap="wrap" gap={1}>
+        {priceRanges.map((range) => {
+          const isActive = isPriceRangeActive(range.min, range.max);
+          return (
+            <Button
+              key={range.label}
+              variant={isActive ? 'contained' : 'outlined'}
+              onClick={() => handlePriceRangeClick(range.min, range.max)}
+            >
+              {range.label}
+            </Button>
+          );
         })}
       </Box>
     </>
