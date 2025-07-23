@@ -2,6 +2,24 @@
 
 Este proyecto es una aplicación web que muestra una lista de productos. Incluye una aplicación frontend construida con React y una API backend que sirve datos de productos desde un archivo JSON.
 
+## Tecnologías frontend
+
+- React
+- Vite
+- TypeScript
+- React Query
+- React Router
+- React Hook Form
+- Zod
+- Material-UI
+- Redux Toolkit
+- Axios
+- Lodash
+
+## Link al proyecto en producción
+https://hcya-challenge-app.onrender.com/
+Puede tomar unos minutos cargar la página por primera vez ya que se está ejecutando en un servidor gratuito.
+
 ## Características
 
 - Ver una lista de productos
