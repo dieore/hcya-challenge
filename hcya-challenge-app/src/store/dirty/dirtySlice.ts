@@ -14,6 +14,7 @@ const dirtySlice = createSlice({
   reducers: {
     setDirtyState: (state, action: PayloadAction<{ model: string; key: string; isDirty: boolean }>) => {
       state[action.payload.model] = {
+        ...state[action.payload.model],
         [action.payload.key]: action.payload.isDirty
       }
     },

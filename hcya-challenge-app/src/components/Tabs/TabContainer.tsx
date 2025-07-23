@@ -12,7 +12,7 @@ export default function TabContainer() {
   const dispatch = useAppDispatch();
 
   const handleCloseTab = (tabId: string) => {
-    const isDirty = Object.keys(dirtyState).find((model) => model === tabId);
+    const isDirty = Object.keys(dirtyState).find((model) => model === tabId) && Object.values(dirtyState[tabId]).some((value) => value);
 
     if (isDirty) {
       dispatch(openModal({
