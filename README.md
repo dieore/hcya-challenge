@@ -1,63 +1,63 @@
-### HCyA Frontend Challenge
+# HCyA Challenge
 
-# 🎯 Objetivo
-Construir una interfaz de usuario moderna, funcional y responsiva para la administración de productos, consumiendo una API REST. 
+Este proyecto es una aplicación web que muestra una lista de productos. Incluye una aplicación frontend construida con React y una API backend que sirve datos de productos desde un archivo JSON.
 
-Recursos
-La app está inicializada con React, Vite y Typescript. Se encuentra configurado el store con Redux Toolkit y se disponen los servicios para consumir la API. La API es un JSON Server de fácil instalación local lista para consumir.
+## Características
 
+- Ver una lista de productos
+- Crear, editar y eliminar productos
+- Filtrar productos por nombre, categoría, subcategoría, marca y precio
+- Ordenar productos
+- Buscar productos por nombre
+- Mostrar detalles de un producto
 
-# 🖥️ Funcionalidades requeridas
-📌 1. Menú lateral
-Menú lateral expandible y colapsable.
-- Cada ítem del menú debe abrirse en una nueva solapa (tab).
-- Las solapas deben mantener su estado, incluso si se cambia de pestaña (ej: filtros, datos cargados, campos editados).
+## Instrucciones
 
+Estas instrucciones te guiarán a través del proceso de clonación y ejecución del proyecto en tu máquina local.
 
-📌 2. Módulo de ABM de productos
-Implementar una interfaz que permita:
-✅ Obtener (listar)
+### Requisitos
 
-✅ Crear
+- Node.js (v18 or higher)
+- pnpm
 
-✅ Editar
+### Instalación
 
-✅ Eliminar productos
+1. **Clonar el repositorio:**
 
+   ```bash
+   git clone https://github.com/diegoorefici/hcya-challenge.git
+   cd hcya-challenge
+   ```
 
-Se valorarán los siguientes puntos con enfoque centrado en la experiencia de usuario:
-- La utilización de selectores múltiples que permitan concatenar filtros para:
-    Super-Categoría → Categoría → Subcategoría
-    Marca
+2. **Instalar dependencias de la API:**
 
-- Mostrar los productos en una tabla paginada que muestre de forma clara el total de resultados, propiedades, que permita ordenar y filtrar campos de texto por búsqueda parcial.
+   ```bash
+   cd hcya-challenge-api
+   pnpm install
+   ```
 
-- Abrir los formularios de creación/edición en modales o en un panel lateral/tab adicional.
+3. **Instalar dependencias del frontend:**
 
-- Validar los campos requeridos (nombre, precio, stock, marca, categoría, subcategoría).
+   ```bash
+   cd ../hcya-challenge-app
+   pnpm install
+   ```
 
-- Mostrar mensajes claros al usuario ante operaciones exitosas, errores de validación o comunicación con el servidor. 
+### Ejecución
 
-- Alertar ante la posibilidad de salir de la sección y perder cambios no guardados.
+1. **Iniciar la API:**
 
+   ```bash
+   cd hcya-challenge-api
+   pnpm start
+   ```
 
-ℹ️ Podés agregar o quitar librerías que prefieras. Tenés total libertad para mostrar tus conocimientos.
+   La API se ejecutará en `http://localhost:3000`.
 
+2. **Iniciar la aplicación frontend:**
 
-# 📦 Formato de entrega
-El resultado del challenge debe entregarse mediante un repositorio público y una URL accesible en Internet:
-1. Repositorio en GitHub/GitLab/Bitbucket
-Debe contener:
-Todo el código fuente del proyecto frontend.
-
-
-Instrucciones para levantar en local.
-Plus (deseables que suman puntos):
-Un enlace al despliegue público de la aplicación.
-Opciones gratuitas:
-Vercel
-Netlify
-Render
-Glitch
-
-
+   ```bash
+   cd hcya-challenge-app
+   pnpm dev
+   ```
+   La aplicación frontend se ejecutará en `http://localhost:5173`.
