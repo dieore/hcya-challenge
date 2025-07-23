@@ -1,4 +1,4 @@
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, Button } from "@mui/material";
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, Button, Checkbox, ListItemText } from "@mui/material";
 import { useBrands } from "../../hooks/brands";
 import { useCategories } from "../../hooks/categories";
 import { useSubcategories } from "../../hooks/subcategories";
@@ -128,8 +128,9 @@ export default function ProductFilters({
             renderValue={(selected) => selected.map(id => getFilterLabel('brandId', id)).join(', ')}
           >
             {brands.map((brand) => (
-              <MenuItem key={brand.id} value={brand.id}>
-                {brand.name}
+              <MenuItem key={brand.id} value={brand.id.toString()}>
+                <Checkbox checked={filters.brandId.includes(brand.id.toString())} />
+                <ListItemText primary={brand.name} />
               </MenuItem>
             ))}
           </Select>
@@ -145,8 +146,9 @@ export default function ProductFilters({
             renderValue={(selected) => selected.map(id => getFilterLabel('supercategoryId', id)).join(', ')}
           >
             {supercategories.map((supercategory) => (
-              <MenuItem key={supercategory.id} value={supercategory.id}>
-                {supercategory.name}
+              <MenuItem key={supercategory.id} value={supercategory.id.toString()}>
+                <Checkbox checked={filters.supercategoryId.includes(supercategory.id.toString())} />
+                <ListItemText primary={supercategory.name} />
               </MenuItem>
             ))}
           </Select>
@@ -166,8 +168,9 @@ export default function ProductFilters({
               <MenuItem disabled>Seleccione una supercategoría primero</MenuItem>
             ) : (
               filteredCategories.map((category) => (
-                <MenuItem key={category.id} value={category.id}>
-                  {category.name}
+                <MenuItem key={category.id} value={category.id.toString()}>
+                  <Checkbox checked={filters.categoryId.includes(category.id.toString())} />
+                  <ListItemText primary={category.name} />
                 </MenuItem>
               ))
             )}
@@ -188,8 +191,9 @@ export default function ProductFilters({
               <MenuItem disabled>Seleccione una categoría primero</MenuItem>
             ) : (
               filteredSubcategories.map((subcategory) => (
-                <MenuItem key={subcategory.id} value={subcategory.id}>
-                  {subcategory.name}
+                <MenuItem key={subcategory.id} value={subcategory.id.toString()}>
+                  <Checkbox checked={filters.subcategoryId.includes(subcategory.id.toString())} />
+                  <ListItemText primary={subcategory.name} />
                 </MenuItem>
               ))
             )}
