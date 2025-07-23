@@ -10,7 +10,7 @@ const api: AxiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000
+  // timeout: 10000
 });
 
 // Add request interceptor for common headers or tokens
