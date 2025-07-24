@@ -1,4 +1,4 @@
-import { Typography, Box, Button } from "@mui/material";
+import { Typography, Box, IconButton } from "@mui/material";
 import { useDebounce } from "../hooks/useDebounce";
 import { isEqual } from 'lodash';
 import { useProducts, useDeleteProduct } from "../hooks/products";
@@ -10,7 +10,7 @@ import { setDirtyState } from '../store/dirty/dirtySlice';
 import ProductTable from "../components/Products/ProductTable";
 import ProductFilters from "../components/Products/ProductFilters";
 import ProductForm from "../components/Products/ProductForm";
-import AddIcon from '@mui/icons-material/Add';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import type { Product, Filters } from "../schemas/productSchema";
 import type { FilterName } from "../components/Products/ProductFilters";
@@ -125,6 +125,11 @@ export default function Products() {
     });
   }, []);
 
+  const handleClearAllFilters = () => {
+    setSearch('');
+    setFilters(initialFilters);
+  };
+
   const handleRemoveFilter = useCallback((filterName: FilterName, value?: string) => {
     if (filterName === 'price_gte' || filterName === 'price_lte') {
       setFilters(prev => ({
@@ -180,13 +185,12 @@ export default function Products() {
         <Typography variant="h6">
           Productos totales: {products?.total ? products?.total : '...'}
         </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
+        <IconButton 
+          color="secondary"
           onClick={() => setIsFormOpen(true)}
         >
-          Nuevo Producto
-        </Button>
+          <AddCircleIcon fontSize="large" />
+        </IconButton>
       </Box>
 
       <ProductFilters
@@ -195,6 +199,7 @@ export default function Products() {
         filters={filters}
         onFilterChange={handleFilterChange}
         onRemoveFilter={handleRemoveFilter}
+        onClearAllFilters={handleClearAllFilters}
         isLoading={isLoading}
       />
 

@@ -1,4 +1,5 @@
-import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, Button, Checkbox, ListItemText } from "@mui/material";
+import { Box, TextField, FormControl, InputLabel, Select, MenuItem, Chip, Button, Checkbox, ListItemText, InputAdornment, IconButton } from "@mui/material";
+import ClearIcon from '@mui/icons-material/Clear';
 import { useBrands } from "../../hooks/brands";
 import { useCategories } from "../../hooks/categories";
 import { useSubcategories } from "../../hooks/subcategories";
@@ -20,6 +21,7 @@ export interface ProductFiltersProps {
   };
   onFilterChange: (filterName: FilterName, value: any) => void;
   onRemoveFilter: (filterName: FilterName, value?: string) => void;
+  onClearAllFilters: () => void;
   isLoading?: boolean;
 }
 
@@ -29,24 +31,13 @@ export default function ProductFilters({
   filters,
   onFilterChange,
   onRemoveFilter,
+  onClearAllFilters,
   isLoading = false,
 }: ProductFiltersProps) {
   const { data: brands = [] } = useBrands();
   const { data: allCategories = [] } = useCategories();
   const { data: allSubcategories = [] } = useSubcategories();
   const { data: supercategories = [] } = useSupercategories();
-
-  const filteredCategories = filters.supercategoryId.length > 0
-    ? allCategories.filter(cat =>
-      filters.supercategoryId.includes(cat.supercategoryId.toString())
-    )
-    : [];
-
-  const filteredSubcategories = filters.categoryId.length > 0
-    ? allSubcategories.filter(sub =>
-      filters.categoryId.includes(sub.categoryId.toString())
-    )
-    : [];
 
   const priceRanges = [
     { label: 'Menos de $300', min: 0, max: 300 },
@@ -91,13 +82,13 @@ export default function ProductFilters({
   const getFilterLabel = (filterName: FilterName, value: string) => {
     switch (filterName) {
       case 'brandId':
-        return brands.find(b => b.id.toString() === value)?.name || value;
+        return brands.find(b => b.id === value)?.name || value;
       case 'supercategoryId':
-        return supercategories.find(s => s.id.toString() === value)?.name || value;
+        return supercategories.find(s => s.id === value)?.name || value;
       case 'categoryId':
-        return allCategories.find(c => c.id.toString() === value)?.name || value;
+        return allCategories.find(c => c.id === value)?.name || value;
       case 'subcategoryId':
-        return allSubcategories.find(s => s.id.toString() === value)?.name || value;
+        return allSubcategories.find(s => s.id === value)?.name || value;
       case 'price_gte':
       case 'price_lte':
         return value;
@@ -107,7 +98,7 @@ export default function ProductFilters({
   return (
     <>
       <Box display="flex" flexWrap="wrap" gap={2} mb={2}>
-        <FormControl sx={{ width: 200 }} size="small">
+        <FormControl sx={{ flex: 1 }} size="small">
           <TextField
             size="small"
             label="Buscar por nombre"
@@ -115,10 +106,24 @@ export default function ProductFilters({
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             disabled={isLoading}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  {search && (
+                    <IconButton
+                      onClick={() => onSearchChange('')}
+                      edge="end"
+                    >
+                      <ClearIcon fontSize="small" />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              )
+            }}
           />
         </FormControl>
 
-        <FormControl sx={{ width: 200 }} size="small">
+        <FormControl sx={{ flex: 1 }} size="small">
           <InputLabel>Marca</InputLabel>
           <Select
             multiple
@@ -128,15 +133,15 @@ export default function ProductFilters({
             renderValue={(selected) => selected.map(id => getFilterLabel('brandId', id)).join(', ')}
           >
             {brands.map((brand) => (
-              <MenuItem key={brand.id} value={brand.id.toString()}>
-                <Checkbox checked={filters.brandId.includes(brand.id.toString())} />
+              <MenuItem key={brand.id} value={brand.id}>
+                <Checkbox checked={filters.brandId.includes(brand.id)} />
                 <ListItemText primary={brand.name} />
               </MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        <FormControl sx={{ width: 200 }} size="small">
+        <FormControl sx={{ flex: 1 }} size="small">
           <InputLabel>Supercategoría</InputLabel>
           <Select
             multiple
@@ -146,15 +151,15 @@ export default function ProductFilters({
             renderValue={(selected) => selected.map(id => getFilterLabel('supercategoryId', id)).join(', ')}
           >
             {supercategories.map((supercategory) => (
-              <MenuItem key={supercategory.id} value={supercategory.id.toString()}>
-                <Checkbox checked={filters.supercategoryId.includes(supercategory.id.toString())} />
+              <MenuItem key={supercategory.id} value={supercategory.id}>
+                <Checkbox checked={filters.supercategoryId.includes(supercategory.id)} />
                 <ListItemText primary={supercategory.name} />
               </MenuItem>
             ))}
           </Select>
         </FormControl>
 
-        <FormControl sx={{ width: 200 }} size="small">
+        <FormControl sx={{ flex: 1 }} size="small">
           <InputLabel>Categoría</InputLabel>
           <Select
             multiple
@@ -164,12 +169,12 @@ export default function ProductFilters({
             disabled={filters.supercategoryId.length === 0}
             renderValue={(selected) => selected.map(id => getFilterLabel('categoryId', id)).join(', ')}
           >
-            {filteredCategories.length === 0 ? (
+            {allCategories.length === 0 ? (
               <MenuItem disabled>Seleccione una supercategoría primero</MenuItem>
             ) : (
-              filteredCategories.map((category) => (
-                <MenuItem key={category.id} value={category.id.toString()}>
-                  <Checkbox checked={filters.categoryId.includes(category.id.toString())} />
+              allCategories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  <Checkbox checked={filters.categoryId.includes(category.id)} />
                   <ListItemText primary={category.name} />
                 </MenuItem>
               ))
@@ -177,7 +182,7 @@ export default function ProductFilters({
           </Select>
         </FormControl>
 
-        <FormControl sx={{ width: 200 }} size="small">
+        <FormControl sx={{ flex: 1 }} size="small">
           <InputLabel>Subcategoría</InputLabel>
           <Select
             multiple
@@ -187,18 +192,25 @@ export default function ProductFilters({
             disabled={filters.categoryId.length === 0}
             renderValue={(selected) => selected.map(id => getFilterLabel('subcategoryId', id)).join(', ')}
           >
-            {filteredSubcategories.length === 0 ? (
+            {allSubcategories.length === 0 ? (
               <MenuItem disabled>Seleccione una categoría primero</MenuItem>
             ) : (
-              filteredSubcategories.map((subcategory) => (
-                <MenuItem key={subcategory.id} value={subcategory.id.toString()}>
-                  <Checkbox checked={filters.subcategoryId.includes(subcategory.id.toString())} />
+              allSubcategories.map((subcategory) => (
+                <MenuItem key={subcategory.id} value={subcategory.id}>
+                  <Checkbox checked={filters.subcategoryId.includes(subcategory.id)} />
                   <ListItemText primary={subcategory.name} />
                 </MenuItem>
               ))
             )}
           </Select>
         </FormControl>
+
+        <Button
+          onClick={onClearAllFilters}
+          disabled={isLoading}
+        >
+          Limpiar filtros
+        </Button>
       </Box>
 
       <Box display="flex" flexWrap="wrap" gap={1} mb={2}>
@@ -234,6 +246,7 @@ export default function ProductFilters({
           ));
         })}
       </Box>
+
 
       <Box display="flex" flexWrap="wrap" gap={1}>
         {priceRanges.map((range) => {
