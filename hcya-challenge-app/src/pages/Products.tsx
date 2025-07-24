@@ -175,10 +175,10 @@ export default function Products() {
   }
 
   return (
-    <Box p={2}>
+    <Box>
       <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-between" gap={2} mb={2}>
         <Typography variant="h6">
-          Total de productos: {products?.total ? products?.total : '...'}
+          Productos totales: {products?.total ? products?.total : '...'}
         </Typography>
         <Button
           variant="contained"
