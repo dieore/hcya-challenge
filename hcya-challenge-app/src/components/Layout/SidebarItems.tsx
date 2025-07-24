@@ -34,7 +34,7 @@ export const sidebarItems: SidebarItem[] = [
   },
   {
     id: "supercategories",
-    label: "Supercategorías",
+    label: "Super Categorías",
     icon: <Layers />,
     component: <SupercategoriesPage />,
   },
@@ -46,7 +46,7 @@ export const sidebarItems: SidebarItem[] = [
   },
   {
     id: "subcategories",
-    label: "Subcategorías",
+    label: "Sub Categorías",
     icon: <Style />,
     component: <SubcategoriesPage />,
   },

@@ -222,7 +222,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                   <TextField
                     {...field}
                     size="small"
-                    label="Nombre del producto"
+                    label="Nombre"
                     error={!!errors.name}
                     helperText={errors.name?.message as string}
                     fullWidth
@@ -341,10 +341,10 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                 control={control}
                 render={({ field }) => (
                   <FormControl fullWidth size="small"  error={!!errors.supercategoryId}>
-                    <InputLabel>Supercategoría</InputLabel>
+                    <InputLabel>Super categoría</InputLabel>
                     <Select
                       {...field}
-                      label="Supercategoría"
+                      label="Super categoría"
                     >
                       {supercategories.map((supercategory) => (
                         <MenuItem key={supercategory.id} value={supercategory.id.toString()}>
@@ -386,10 +386,10 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                 control={control}
                 render={({ field }) => (
                   <FormControl fullWidth size="small"  error={!!errors.subcategoryId}>
-                    <InputLabel>Subcategoría</InputLabel>
+                    <InputLabel>Sub categoría</InputLabel>
                     <Select
                       {...field}
-                      label="Subcategoría"
+                      label="Sub categoría"
                       disabled={!categoryId}
                     >
                       {subcategories.map((subcategory) => (

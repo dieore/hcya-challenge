@@ -70,7 +70,7 @@ export default function ProductTable({
     },
     {
       field: 'subcategory',
-      headerName: 'Subcategoría',
+      headerName: 'Sub categoría',
       flex: 1,
       sortable: true,
       sortComparator: (v1: Subcategory, v2: Subcategory) => (v1?.name || '').localeCompare(v2?.name || ''),

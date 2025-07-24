@@ -5,7 +5,7 @@ import { useSupercategories } from "../hooks/supercategories";
 const columns: GridColDef[] = [
   {
     field: 'name',
-    headerName: 'Super-categoría',
+    headerName: 'Super categoría',
     flex: 1
   },
 ];
@@ -19,7 +19,7 @@ export default function Supercategories() {
 
   return (
     <Box height={600}>
-      <Typography variant="h6" gutterBottom>Super-categorías totales: {supercategories?.length}</Typography>
+      <Typography variant="h6" gutterBottom>Super categorías totales: {supercategories?.length}</Typography>
       <DataGrid
         rows={supercategories}
         columns={columns}

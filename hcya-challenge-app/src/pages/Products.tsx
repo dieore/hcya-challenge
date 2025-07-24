@@ -223,8 +223,6 @@ export default function Products() {
         onSuccess={handleSuccess}
         product={editingProduct}
       />
-
-
     </Box>
   );
 }

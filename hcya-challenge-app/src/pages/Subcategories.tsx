@@ -8,7 +8,7 @@ export default function Subcategories() {
   const columns: GridColDef[] = [
     { 
       field: 'name', 
-      headerName: 'Sub-categoría', 
+      headerName: 'Sub categoría', 
       flex: 1 
     },
     {
@@ -26,7 +26,7 @@ export default function Subcategories() {
   return (
     <Box height={600}>
       <Typography variant="h6" gutterBottom>
-        Sub-categorías totales: {subcategories?.length}
+        Sub categorías totales: {subcategories?.length}
       </Typography>
       <DataGrid
         rows={subcategories}

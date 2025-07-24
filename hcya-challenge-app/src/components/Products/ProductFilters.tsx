@@ -142,12 +142,12 @@ export default function ProductFilters({
         </FormControl>
 
         <FormControl sx={{ flex: 1 }} size="small">
-          <InputLabel>Supercategoría</InputLabel>
+          <InputLabel>Super categoría</InputLabel>
           <Select
             multiple
             value={filters.supercategoryId}
             onChange={handleFilterSelect('supercategoryId')}
-            label="Supercategoría"
+            label="Super categoría"
             renderValue={(selected) => selected.map(id => getFilterLabel('supercategoryId', id)).join(', ')}
           >
             {supercategories.map((supercategory) => (
@@ -183,12 +183,12 @@ export default function ProductFilters({
         </FormControl>
 
         <FormControl sx={{ flex: 1 }} size="small">
-          <InputLabel>Subcategoría</InputLabel>
+          <InputLabel>Sub categoría</InputLabel>
           <Select
             multiple
             value={filters.subcategoryId}
             onChange={handleFilterSelect('subcategoryId')}
-            label="Subcategoría"
+            label="Sub categoría"
             disabled={filters.categoryId.length === 0}
             renderValue={(selected) => selected.map(id => getFilterLabel('subcategoryId', id)).join(', ')}
           >
