@@ -1,7 +1,10 @@
 import HomePage from "../../pages/Home";
 import ProductsPage from "../../pages/Products";
 import CategoriesPage from "../../pages/Categories";
-import { Home, ShoppingCart, Category } from "@mui/icons-material";
+import BrandsPage from "../../pages/Brands";
+import SupercategoriesPage from "../../pages/Supercategories";
+import SubcategoriesPage from "../../pages/Subcategories";
+import { Home, ShoppingCart, Category, Storefront, Layers, Style } from "@mui/icons-material";
 
 interface SidebarItem {
   id: string;
@@ -24,9 +27,27 @@ export const sidebarItems: SidebarItem[] = [
     component: <ProductsPage />,
   },
   {
+    id: "brands",
+    label: "Marcas",
+    icon: <Storefront />,
+    component: <BrandsPage />,
+  },
+  {
+    id: "supercategories",
+    label: "Supercategorías",
+    icon: <Layers />,
+    component: <SupercategoriesPage />,
+  },
+  {
     id: "categories",
     label: "Categorías",
     icon: <Category />,
     component: <CategoriesPage />,
+  },
+  {
+    id: "subcategories",
+    label: "Subcategorías",
+    icon: <Style />,
+    component: <SubcategoriesPage />,
   },
 ];

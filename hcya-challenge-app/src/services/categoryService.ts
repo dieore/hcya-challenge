@@ -33,6 +33,7 @@ export class CategoryService {
 
   async getByQuery(params: CategoryQueryParams = {}) {
     const searchParams = new URLSearchParams();
+    searchParams.append('_expand', 'supercategory');
 
     Object.entries(params).forEach(([key, value]) => {
       if (Array.isArray(value)) {

@@ -35,7 +35,6 @@ export class ProductService {
 
   async getByQuery(params: ProductQueryParams = {}): Promise<ProductResponse> {
     const searchParams = new URLSearchParams();
-    
     searchParams.append('_expand', 'brand');
     searchParams.append('_expand', 'category');
     searchParams.append('_expand', 'subcategory');
