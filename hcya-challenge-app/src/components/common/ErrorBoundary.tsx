@@ -46,11 +46,11 @@ class ErrorBoundary extends Component<Props, State> {
             }}
           >
             <Typography variant="h4" component="h1" gutterBottom>
-              Oops! Something went wrong.
+              Oops! Algo salió mal.
             </Typography>
-            <Typography variant="body1" color="textSecondary" paragraph>
-              We're sorry for the inconvenience. You can try refreshing the page
-              or go back to the homepage.
+            <Typography variant="body1" color="textSecondary">
+              Lo sentimos por el inconveniente. Puedes intentar recargar la
+              página o volver a la página de inicio.
             </Typography>
             <Box sx={{ mt: 4 }}>
               <Button
@@ -58,10 +58,10 @@ class ErrorBoundary extends Component<Props, State> {
                 onClick={this.handleRefresh}
                 sx={{ mr: 2 }}
               >
-                Refresh Page
+                Recargar página
               </Button>
               <Button variant="contained" onClick={this.goHome}>
-                Go Home
+                Volver a la página de inicio
               </Button>
             </Box>
           </Box>
