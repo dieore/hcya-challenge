@@ -47,79 +47,79 @@
     {
       "id": "1",
       "name": "Teléfonos",
-      "supercategoryId": 1
+      "supercategoryId": "1"
     },
     {
       "id": "2",
       "name": "Computadoras",
-      "supercategoryId": 1
+      "supercategoryId": "1"
     },
     {
       "id": "3",
       "name": "Electrodomésticos",
-      "supercategoryId": 2
+      "supercategoryId": "2"
     },
     {
       "id": "4",
       "name": "Ropa de Hombre",
-      "supercategoryId": 3
+      "supercategoryId": "3"
     },
     {
       "id": "5",
       "name": "Ropa de Mujer",
-      "supercategoryId": 3
+      "supercategoryId": "3"
     }
   ],
   "subcategories": [
     {
       "id": "1",
       "name": "Smartphones",
-      "categoryId": 1
+      "categoryId": "1"
     },
     {
       "id": "2",
       "name": "Teléfonos Fijos",
-      "categoryId": 1
+      "categoryId": "1"
     },
     {
       "id": "3",
       "name": "Notebooks",
-      "categoryId": 2
+      "categoryId": "2"
     },
     {
       "id": "4",
       "name": "All-in-One",
-      "categoryId": 2
+      "categoryId": "2"
     },
     {
       "id": "5",
       "name": "Heladeras",
-      "categoryId": 3
+      "categoryId": "3"
     },
     {
       "id": "6",
       "name": "Microondas",
-      "categoryId": 3
+      "categoryId": "3"
     },
     {
       "id": "7",
       "name": "Remeras",
-      "categoryId": 4
+      "categoryId": "4"
     },
     {
       "id": "8",
       "name": "Jeans",
-      "categoryId": 4
+      "categoryId": "4"
     },
     {
       "id": "9",
       "name": "Vestidos",
-      "categoryId": 5
+      "categoryId": "5"
     },
     {
       "id": "10",
       "name": "Faldas",
-      "categoryId": 5
+      "categoryId": "5"
     }
   ],
   "products": [
