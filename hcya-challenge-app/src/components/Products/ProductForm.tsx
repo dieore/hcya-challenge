@@ -132,26 +132,18 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
   const supercategoryId = watch('supercategoryId');
   const categoryId = watch('categoryId');
 
-  const filteredCategories = supercategoryId
-    ? categories.filter(cat => cat.supercategoryId === Number(supercategoryId))
-    : [];
-
-  const filteredSubcategories = categoryId
-    ? subcategories.filter(sub => sub.categoryId === Number(categoryId))
-    : [];
-
   useEffect(() => {
-    if (isDirty) {
+    if (isDirty) {      
       setValue('categoryId', '');
       setValue('subcategoryId', '');
     }
-  }, [supercategoryId, isDirty, setValue]);
+  }, [supercategoryId]);
 
   useEffect(() => {
     if (isDirty) {
       setValue('subcategoryId', '');
     }
-  }, [categoryId, isDirty, setValue]);
+  }, [categoryId]);
 
   useEffect(() => {
     if (open) {
@@ -333,7 +325,7 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                       label="Marca"
                     >
                       {brands.map((brand) => (
-                        <MenuItem key={brand.id} value={brand.id.toString()}>
+                        <MenuItem key={brand.id} value={brand.id}>
                           {brand.name}
                         </MenuItem>
                       ))}
@@ -377,8 +369,8 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                       label="Categoría"
                       disabled={!supercategoryId}
                     >
-                      {filteredCategories.map((category) => (
-                        <MenuItem key={category.id} value={category.id.toString()}>
+                      {categories.map((category) => (
+                        <MenuItem key={category.id} value={category.id}>
                           {category.name}
                         </MenuItem>
                       ))}
@@ -400,8 +392,8 @@ export default function ProductForm({ open, onClose, onSuccess, product }: Produ
                       label="Subcategoría"
                       disabled={!categoryId}
                     >
-                      {filteredSubcategories.map((subcategory) => (
-                        <MenuItem key={subcategory.id} value={subcategory.id.toString()}>
+                      {subcategories.map((subcategory) => (
+                        <MenuItem key={subcategory.id} value={subcategory.id}>
                           {subcategory.name}
                         </MenuItem>
                       ))}
